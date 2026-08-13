@@ -113,13 +113,21 @@ def build_label_to_column(base_url: str, doc_id: str, table: str, api_key: str) 
 def build_reference_map(base_url: str, doc_id: str, ref_table: str, api_key: str) -> dict:
     """{row_id: texte affiché} pour une table de référence simple (ex: table Offre)."""
     columns = fetch_columns(base_url, doc_id, ref_table, api_key)
+    text_columns = [
+        col for col in columns
+        if (col.get("fields", {}) or {}).get("type", "Text") in ("Text", "Choice")
+    ]
+
     text_col_id = None
-    for col in columns:
-        fields = col.get("fields", {}) or {}
-        col_type = fields.get("type", "Text")
-        if col_type == "Text" or col_type == "Choice":
+    # Convention Grist courante : la colonne d'affichage d'une table de référence
+    # porte souvent le même nom que la table (ex: colonne "Offre" dans la table "Offre").
+    for col in text_columns:
+        label = (col.get("fields", {}) or {}).get("label", "")
+        if label.strip().lower() == ref_table.strip().lower():
             text_col_id = col["id"]
             break
+    if text_col_id is None and text_columns:
+        text_col_id = text_columns[0]["id"]
     if text_col_id is None and columns:
         text_col_id = columns[0]["id"]
 
