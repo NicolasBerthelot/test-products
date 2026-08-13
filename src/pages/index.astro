@@ -3,6 +3,16 @@ import Base from "../layouts/Base.astro";
 import produits from "../data/produits.json";
 
 const offres = [...new Set(produits.map((p) => p.offre).filter(Boolean))].sort();
+
+const DIACRITICS = /[̀-ͯ]/g;
+
+function normalize(s: string) {
+  return s.normalize("NFD").replace(DIACRITICS, "").toLowerCase();
+}
+
+function searchIndex(p: (typeof produits)[number]) {
+  return normalize([p.nom, p.promesse, p.equipe].filter(Boolean).join(" "));
+}
 ---
 <Base title="Accueil" description="Découvrez les produits numériques développés par l'IGN : référentiels, observation du territoire et services associés.">
   <section class="ign-hero">
@@ -17,6 +27,18 @@ const offres = [...new Set(produits.map((p) => p.offre).filter(Boolean))].sort()
 
   <div class="ign-filters">
     <div class="fr-container">
+      <div class="fr-search-bar fr-mb-2w" role="search">
+        <label class="fr-label" for="product-search">Rechercher un produit</label>
+        <input
+          class="fr-input"
+          placeholder="Nom, promesse, équipe..."
+          type="search"
+          id="product-search"
+          name="product-search"
+        />
+        <button class="fr-btn" title="Rechercher" type="button">Rechercher</button>
+      </div>
+
       <p class="fr-text--sm fr-mb-1w" style="font-weight: 700;">Filtrer par offre</p>
       <ul class="fr-tags-group" id="offre-filters">
         <li>
@@ -41,7 +63,7 @@ const offres = [...new Set(produits.map((p) => p.offre).filter(Boolean))].sort()
   <section class="fr-container fr-py-6w">
     <div class="fr-grid-row fr-grid-row--gutters" id="product-grid">
       {produits.map((p) => (
-        <div class="fr-col-12 fr-col-md-6 fr-col-lg-4 product-item" data-offre={p.offre}>
+        <div class="fr-col-12 fr-col-md-6 fr-col-lg-4 product-item" data-offre={p.offre} data-search={searchIndex(p)}>
           <div class="fr-card fr-enlarge-link ign-product-card">
             <div class="fr-card__body">
               <div class="fr-card__content">
@@ -61,27 +83,44 @@ const offres = [...new Set(produits.map((p) => p.offre).filter(Boolean))].sort()
         </div>
       ))}
     </div>
-    <p id="empty-state" class="fr-hidden fr-mt-4w">Aucun produit ne correspond à ce filtre.</p>
+    <p id="empty-state" class="fr-hidden fr-mt-4w" aria-live="polite">Aucun produit ne correspond à ces critères.</p>
   </section>
 
   <script>
+    const DIACRITICS = /[̀-ͯ]/g;
+    function normalize(s: string) {
+      return s.normalize("NFD").replace(DIACRITICS, "").toLowerCase();
+    }
+
     const buttons = document.querySelectorAll<HTMLButtonElement>("#offre-filters .ign-chip");
     const items = document.querySelectorAll<HTMLElement>(".product-item");
     const emptyState = document.getElementById("empty-state");
+    const searchInput = document.querySelector<HTMLInputElement>("#product-search");
+
+    let activeOffre = "all";
+
+    function applyFilters() {
+      const term = normalize(searchInput?.value.trim() ?? "");
+      let visibleCount = 0;
+      items.forEach((item) => {
+        const matchOffre = activeOffre === "all" || item.dataset.offre === activeOffre;
+        const matchSearch = term === "" || (item.dataset.search ?? "").includes(term);
+        const match = matchOffre && matchSearch;
+        item.style.display = match ? "" : "none";
+        if (match) visibleCount++;
+      });
+      emptyState?.classList.toggle("fr-hidden", visibleCount > 0);
+    }
 
     buttons.forEach((btn) => {
       btn.addEventListener("click", () => {
         buttons.forEach((b) => b.setAttribute("aria-pressed", "false"));
         btn.setAttribute("aria-pressed", "true");
-        const offre = btn.dataset.offre;
-        let visibleCount = 0;
-        items.forEach((item) => {
-          const match = offre === "all" || item.dataset.offre === offre;
-          (item as HTMLElement).style.display = match ? "" : "none";
-          if (match) visibleCount++;
-        });
-        emptyState?.classList.toggle("fr-hidden", visibleCount > 0);
+        activeOffre = btn.dataset.offre ?? "all";
+        applyFilters();
       });
     });
+
+    searchInput?.addEventListener("input", applyFilters);
   </script>
 </Base>
