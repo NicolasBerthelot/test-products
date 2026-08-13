@@ -165,6 +165,14 @@ def resolve_value(raw, col_type: str, label: str, base_url: str, doc_id: str, ap
         texts = [t for t in texts if t]
         return ", ".join(texts) if texts else None
 
+    if isinstance(raw, list):
+        # ChoiceList (et listes similaires) : Grist encode ["L", valeur1, valeur2, ...],
+        # les valeurs sont déjà du texte, pas des id à résoudre.
+        items = raw[1:] if raw[:1] == ["L"] else raw
+        texts = [clean_scalar(v, label) for v in items]
+        texts = [t for t in texts if t]
+        return ", ".join(texts) if texts else None
+
     return clean_scalar(raw, label)
 
 
