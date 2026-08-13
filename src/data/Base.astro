@@ -1,0 +1,132 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = "Catalogue des produits numériques de l'IGN" } = Astro.props;
+const DSFR_VERSION = "1.15.2";
+---
+<!doctype html>
+<html lang="fr" data-fr-scheme="system">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{title} · Produits IGN</title>
+  <link rel="stylesheet" href={`https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@${DSFR_VERSION}/dist/dsfr.min.css`} />
+  <link rel="icon" href={`https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@${DSFR_VERSION}/dist/favicon/favicon.svg`} type="image/svg+xml" />
+  <style>
+    :root {
+      --ign-vert: #00524C;
+      --ign-vert-clair: #1E7A6F;
+    }
+    .ign-hero {
+      background: linear-gradient(135deg, var(--ign-vert) 0%, #003C38 100%);
+      color: #fff;
+    }
+    .ign-hero .fr-container { padding-top: 4rem; padding-bottom: 4rem; }
+    .ign-card-offre {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--ign-vert);
+    }
+    .ign-card-offre::before {
+      content: "";
+      width: 0.5rem;
+      height: 0.5rem;
+      border-radius: 50%;
+      background: currentColor;
+      display: inline-block;
+    }
+    .ign-filters {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #fff;
+      border-bottom: 1px solid var(--border-default-grey, #ddd);
+      padding: 1rem 0;
+    }
+    .ign-chip {
+      cursor: pointer;
+    }
+    .ign-product-card {
+      height: 100%;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .ign-meta-list dt {
+      font-size: 0.8125rem;
+      color: var(--text-mention-grey, #666);
+      margin-top: 1rem;
+    }
+    .ign-meta-list dd {
+      margin: 0;
+      font-weight: 500;
+    }
+    .ign-updated {
+      font-size: 0.8125rem;
+      color: var(--text-mention-grey, #666);
+    }
+  </style>
+</head>
+<body>
+  <header role="banner" class="fr-header">
+    <div class="fr-header__body">
+      <div class="fr-container">
+        <div class="fr-header__body-row">
+          <div class="fr-header__brand fr-enlarge-link">
+            <div class="fr-header__brand-top">
+              <div class="fr-header__logo">
+                <p class="fr-logo">
+                  République<br />Française
+                </p>
+              </div>
+            </div>
+            <div class="fr-header__service">
+              <a href="/" title="Accueil - Produits IGN">
+                <p class="fr-header__service-title">Produits IGN</p>
+              </a>
+              <p class="fr-header__service-tagline">Catalogue des produits numériques de l'Institut national de l'information géographique et forestière</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main role="main" id="content">
+    <slot />
+  </main>
+  <footer class="fr-footer" role="contentinfo">
+    <div class="fr-container">
+      <div class="fr-footer__body">
+        <div class="fr-footer__brand fr-enlarge-link">
+          <p class="fr-logo">
+            République<br />Française
+          </p>
+        </div>
+        <div class="fr-footer__content">
+          <p class="fr-footer__content-desc">
+            Ce catalogue recense les produits numériques développés et opérés par l'IGN, à destination des agents publics, partenaires et citoyens.
+          </p>
+        </div>
+      </div>
+      <div class="fr-footer__bottom">
+        <ul class="fr-footer__bottom-list">
+          <li class="fr-footer__bottom-item">
+            <a class="fr-footer__bottom-link" href="https://www.ign.fr">ign.fr</a>
+          </li>
+        </ul>
+        <div class="fr-footer__bottom-copy">
+          <p>Données issues de la base produits IGN — prototype de démonstration.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script type="module" src={`https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@${DSFR_VERSION}/dist/dsfr.module.min.js`}></script>
+  <script nomodule src={`https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@${DSFR_VERSION}/dist/dsfr.nomodule.min.js`}></script>
+</body>
+</html>
