@@ -1,0 +1,87 @@
+---
+import Base from "../layouts/Base.astro";
+import produits from "../data/produits.json";
+
+const offres = [...new Set(produits.map((p) => p.offre).filter(Boolean))].sort();
+---
+<Base title="Accueil" description="Découvrez les produits numériques développés par l'IGN : référentiels, observation du territoire et services associés.">
+  <section class="ign-hero">
+    <div class="fr-container">
+      <p class="fr-badge fr-badge--yellow-tournesol fr-mb-2w">Catalogue produits</p>
+      <h1 class="fr-mb-2w">Les produits numériques de l'IGN</h1>
+      <p class="fr-text--lead" style="max-width: 46rem;">
+        Référentiels géographiques, observation du territoire, données ouvertes : découvrez les {produits.length} produits que l'IGN conçoit et opère pour les acteurs publics, les entreprises et les citoyens.
+      </p>
+    </div>
+  </section>
+
+  <div class="ign-filters">
+    <div class="fr-container">
+      <p class="fr-text--sm fr-mb-1w" style="font-weight: 700;">Filtrer par offre</p>
+      <ul class="fr-tags-group" id="offre-filters">
+        <li>
+          <button class="fr-tag ign-chip" data-offre="all" aria-pressed="true">
+            Toutes les offres ({produits.length})
+          </button>
+        </li>
+        {offres.map((offre) => {
+          const count = produits.filter((p) => p.offre === offre).length;
+          return (
+            <li>
+              <button class="fr-tag ign-chip" data-offre={offre} aria-pressed="false">
+                {offre} ({count})
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </div>
+
+  <section class="fr-container fr-py-6w">
+    <div class="fr-grid-row fr-grid-row--gutters" id="product-grid">
+      {produits.map((p) => (
+        <div class="fr-col-12 fr-col-md-6 fr-col-lg-4 product-item" data-offre={p.offre}>
+          <div class="fr-card fr-enlarge-link ign-product-card">
+            <div class="fr-card__body">
+              <div class="fr-card__content">
+                {p.offre && <p class="ign-card-offre fr-mb-1w">{p.offre}</p>}
+                <h3 class="fr-card__title">
+                  <a href={`/produits/${p.slug}/`}>{p.nom}</a>
+                </h3>
+                <p class="fr-card__desc">{p.promesse || p.propositionValeur || "Description à venir."}</p>
+                <div class="fr-card__end">
+                  {p.derniereMiseAJour && (
+                    <p class="ign-updated">Mis à jour le {p.derniereMiseAJour.trim()}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+    <p id="empty-state" class="fr-hidden fr-mt-4w">Aucun produit ne correspond à ce filtre.</p>
+  </section>
+
+  <script>
+    const buttons = document.querySelectorAll<HTMLButtonElement>("#offre-filters .ign-chip");
+    const items = document.querySelectorAll<HTMLElement>(".product-item");
+    const emptyState = document.getElementById("empty-state");
+
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        buttons.forEach((b) => b.setAttribute("aria-pressed", "false"));
+        btn.setAttribute("aria-pressed", "true");
+        const offre = btn.dataset.offre;
+        let visibleCount = 0;
+        items.forEach((item) => {
+          const match = offre === "all" || item.dataset.offre === offre;
+          (item as HTMLElement).style.display = match ? "" : "none";
+          if (match) visibleCount++;
+        });
+        emptyState?.classList.toggle("fr-hidden", visibleCount > 0);
+      });
+    });
+  </script>
+</Base>
