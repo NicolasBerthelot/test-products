@@ -47,7 +47,7 @@ const offres = [...new Set(produits.map((p) => p.offre).filter(Boolean))].sort()
               <div class="fr-card__content">
                 {p.offre && <p class="ign-card-offre fr-mb-1w">{p.offre}</p>}
                 <h3 class="fr-card__title">
-                  <a href={`/produits/${p.slug}/`}>{p.nom}</a>
+                  <a href={`${import.meta.env.BASE_URL}produits/${p.slug}/`}>{p.nom}</a>
                 </h3>
                 <p class="fr-card__desc">{p.promesse || p.propositionValeur || "Description à venir."}</p>
                 <div class="fr-card__end">
