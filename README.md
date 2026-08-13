@@ -60,6 +60,19 @@ pip install -r scripts/requirements.txt
 python scripts/grist_to_json.py src/data/produits.json
 ```
 
+### Illustrer un produit
+
+Ajouter une colonne **"Image"** dans la table Grist `Produits` (facultative,
+ignorée si absente) :
+
+- soit une colonne **Texte** contenant une URL d'image directe (la plus
+  simple : hébergez l'image où vous voulez et collez le lien) ;
+- soit une colonne **Pièces jointes** Grist : le fichier est alors
+  téléchargé par `grist_to_json.py` au moment du build et re-hébergé dans
+  `public/images/{slug}.ext` (ce dossier est généré, pas commité — voir
+  `.gitignore`). Une image direct-URL n'a pas cette dépendance et reste
+  visible même sans relancer le script de synchronisation.
+
 ### Solution de secours : régénérer depuis un export CSV
 
 Si l'API Grist est indisponible, `scripts/csv_to_json.py` reproduit la même
@@ -72,7 +85,7 @@ python3 scripts/csv_to_json.py chemin/vers/export.csv src/data/produits.json
 
 ## Prochaines étapes suggérées
 
-- Ajouter une recherche texte libre en plus des filtres par offre.
-- Illustrer chaque produit (capture d'écran, logo).
 - Ajouter une page "Offres" listant les grandes familles de produits.
-- Brancher un vrai hébergement (Vercel, Netlify, ou infra interne IGN/DINUM).
+- Notifier (issue GitHub, webhook) en cas d'échec répété du sync horaire.
+- Widget d'édition Grist custom pour une saisie plus légère que le tableur.
+- Brancher un vrai hébergement (Vercel, Netlify, ou infra interne IGN/DINUM) si le temps réel devient nécessaire.

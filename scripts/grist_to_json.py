@@ -15,6 +15,7 @@ import sys
 import json
 import unicodedata
 from datetime import datetime, timezone
+from pathlib import Path
 
 import requests
 from requests.adapters import HTTPAdapter, Retry
@@ -60,6 +61,10 @@ LABEL_TO_KEY = {
 }
 
 DATE_FIELDS = {"Dernière mise à jour"}
+
+# Colonne "Image" facultative : URL texte directe, ou pièce jointe Grist
+# (téléchargée au moment du build et re-hébergée dans public/images/).
+IMAGES_DIR = Path(__file__).resolve().parent.parent / "public" / "images"
 
 
 def slugify(s: str) -> str:
@@ -148,6 +153,42 @@ def build_reference_map(base_url: str, doc_id: str, ref_table: str, api_key: str
     return ref_map
 
 
+def resolve_image(fields: dict, label_to_column: dict, slug: str, base_url: str, doc_id: str, api_key: str):
+    """URL d'illustration produit : URL texte directe, ou pièce jointe Grist
+    téléchargée au moment du build et re-hébergée dans public/images/."""
+    col = label_to_column.get("Image")
+    if not col:
+        return None
+    raw = fields.get(col["colId"])
+    if raw is None:
+        return None
+
+    if col["type"] != "Attachments":
+        return clean_scalar(raw, "Image")
+
+    if not isinstance(raw, list) or len(raw) < 2:
+        return None
+    attachment_id = raw[1]
+
+    try:
+        meta = fetch_json(f"{base_url}/api/docs/{doc_id}/attachments/{attachment_id}", api_key)
+        resp = _session.get(
+            f"{base_url}/api/docs/{doc_id}/attachments/{attachment_id}/download",
+            headers={"Authorization": f"Bearer {api_key}"},
+            timeout=30,
+        )
+        resp.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        print(f"Attention : téléchargement impossible pour l'image de '{slug}' (pièce jointe {attachment_id}) : {e}", file=sys.stderr)
+        return None
+
+    filename = (meta.get("fields", meta) or {}).get("fileName") or str(attachment_id)
+    ext = os.path.splitext(filename)[1] or ".jpg"
+    IMAGES_DIR.mkdir(parents=True, exist_ok=True)
+    (IMAGES_DIR / f"{slug}{ext}").write_bytes(resp.content)
+    return f"images/{slug}{ext}"
+
+
 def resolve_value(raw, col_type: str, label: str, base_url: str, doc_id: str, api_key: str, ref_cache: dict):
     """Résout une valeur brute Grist en texte, en suivant les colonnes Reference/RefList."""
     if raw is None:
@@ -217,6 +258,7 @@ def main(out_path: str):
         nom = get("Nom du produit", fields)
         if not nom:
             continue
+        slug = slugify(nom)
 
         # L'"Offre" peut être vide sur certaines lignes selon la vue Grist utilisée
         # (cellules groupées) : on propage la dernière valeur connue, comme pour le CSV.
@@ -226,11 +268,12 @@ def main(out_path: str):
         else:
             last_offre = offre
 
-        product = {"slug": slugify(nom), "nom": nom}
+        product = {"slug": slug, "nom": nom}
         for label, key in LABEL_TO_KEY.items():
             if key == "nom":
                 continue
             product[key] = offre if key == "offre" else get(label, fields)
+        product["image"] = resolve_image(fields, label_to_column, slug, base_url, doc_id, api_key)
 
         products.append(product)
 

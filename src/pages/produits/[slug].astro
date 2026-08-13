@@ -56,6 +56,16 @@ function isUrl(v: string) {
     </div>
   </section>
 
+  {p.image && (
+    <div class="fr-container fr-mt-4w">
+      <img
+        class="fr-responsive-img ign-product-image"
+        src={p.image.startsWith("http") ? p.image : `${import.meta.env.BASE_URL}${p.image}`}
+        alt={`Illustration : ${p.nom}`}
+      />
+    </div>
+  )}
+
   <div class="fr-container fr-py-6w">
     <div class="fr-grid-row fr-grid-row--gutters">
       {contentSections.length > 0 && (
