@@ -1,0 +1,78 @@
+# Produits IGN — prototype
+
+Site vitrine des produits numériques de l'IGN, sur le modèle de [beta.gouv.fr/startups](https://beta.gouv.fr/startups) et utilisant le [Système de Design de l'État (DSFR)](https://www.systeme-de-design.gouv.fr/).
+
+## Démarrer
+
+```bash
+npm install
+npm run dev      # http://localhost:4321
+npm run build    # génère le site statique dans dist/
+npm run preview  # prévisualise le build
+```
+
+## Structure
+
+```
+src/
+  data/produits.json        ← données produits (synchronisées depuis l'API Grist)
+  layouts/Base.astro         ← header/footer DSFR, styles communs
+  pages/index.astro          ← page d'accueil : hero + filtres + grille de cartes
+  pages/produits/[slug].astro ← fiche produit (une page par produit)
+```
+
+Le DSFR est chargé via CDN (jsDelivr, version 1.15.2) dans `Base.astro` — pas de
+build DSFR à gérer, mais possibilité de passer au package npm officiel
+(`@gouvfr/dsfr`) si besoin d'un contrôle plus fin ou d'un usage hors-ligne.
+
+## Données : synchronisation live avec Grist
+
+Les données produits viennent du document Grist
+[Fiches produits](https://grist.numerique.gouv.fr/o/docs/toCYiKQga5KP/Fiches-produits/p/1)
+(table `Produits`). `src/data/produits.json` est **régénéré automatiquement
+à chaque déploiement** (voir `.github/workflows/deploy.yml`) :
+
+- déclenchement toutes les heures (`schedule: cron`), sur chaque push sur
+  `main`, ou manuellement depuis l'onglet Actions du dépôt ;
+- le job récupère les enregistrements via l'API REST Grist
+  (`scripts/grist_to_json.py`), régénère `produits.json`, puis build et
+  déploie le site. Rien n'est commité dans le dépôt : la donnée est
+  toujours régénérée à la volée dans la CI.
+
+Le site reste 100% statique (Astro `output: 'static'`, hébergement GitHub
+Pages) — c'est un *rebuild périodique*, pas du server-side rendering :
+les données affichées ont donc jusqu'à une heure de retard sur Grist, pas
+un accès temps réel à chaque visite. Pour du temps réel, il faudrait passer
+Astro en mode `server` (SSR) sur un hébergeur qui exécute du Node (Vercel,
+Netlify, Cloudflare...) — GitHub Pages ne le permet pas.
+
+### Configurer le secret GitHub
+
+Dans le dépôt GitHub : `Settings → Secrets and variables → Actions → New
+repository secret`, créer `GRIST_API_KEY` avec une clé API Grist (Profil
+Grist → API key sur grist.numerique.gouv.fr). Ne jamais commiter cette clé.
+
+### Tester la synchronisation en local
+
+```bash
+cp .env.example .env        # puis renseigner GRIST_API_KEY dans .env
+pip install -r scripts/requirements.txt
+python scripts/grist_to_json.py src/data/produits.json
+```
+
+### Solution de secours : régénérer depuis un export CSV
+
+Si l'API Grist est indisponible, `scripts/csv_to_json.py` reproduit la même
+transformation à partir d'un export CSV manuel (il remplit les cellules
+"Offre" vides des vues groupées avant de normaliser chaque ligne) :
+
+```bash
+python3 scripts/csv_to_json.py chemin/vers/export.csv src/data/produits.json
+```
+
+## Prochaines étapes suggérées
+
+- Ajouter une recherche texte libre en plus des filtres par offre.
+- Illustrer chaque produit (capture d'écran, logo).
+- Ajouter une page "Offres" listant les grandes familles de produits.
+- Brancher un vrai hébergement (Vercel, Netlify, ou infra interne IGN/DINUM).

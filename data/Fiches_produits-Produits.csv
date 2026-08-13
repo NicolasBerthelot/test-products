@@ -1,0 +1,344 @@
+Nom du produit,Offre,Promesse,Proposition de valeur,Vision à 5 ans,Principaux objectifs (1 an),Problèmes,Solutions,Cibles prioritaires,Canaux de déploiement,Impact et indicateurs,Positionnement dans l'écosytème,Site web,Code source,Statistiques d'usage,Contact,RACI,Budget,Equipe,Dernière mise à jour,Dernière mise à jour par
+Base adresse nationale,Référentiels,Référencer l'intégralité des adresses du territoire français,"La Base Adresse Nationale est une des neuf bases de données du service public des données de référence et a pour vocation de référencer l’ensemble des adresses du territoire national. Service numérique partagé et infrastructure socle sur laquelle sont adossées de nombreuses politiques publiques, elle fait partie du système d’information et de communication de l’État.
+",,,,,,,,,https://adresse.data.gouv.fr/,https://github.com/BaseAdresseNationale,https://adresse.data.gouv.fr/stats,adresse@data.gouv.fr,,https://pad.numerique.gouv.fr/rHMnemklQm6Sww5yVCI9ow#Base-Adresse-Nationale,"Frédérique Williams, Vincent Sagniez, Nicolas Kokla",24-07-2026 ,nicolas.berthelot
+Portail cartographique des énergies renouvelables,,,,,,,,,,,,https://planification.climat-energie.gouv.fr/,,,,https://ignf.sharepoint.com/:x:/r/sites/EXT-Mthodeproduit-Promo1/Documents%20partages/G%C3%A9n%C3%A9ral/1.%20Les%20produits%20accompagn%C3%A9s/Portail%20ENR/%5BMod%C3%A8le%20Equipe%5D%20RACI%20et%20Rituels%20Equipe%20Produit%20%E2%80%93%20Copie.xlsx?d=w2d933b61367c4a448bf204ac96ee9c69&csf=1&web=1&e=dTYGoT,,Jean Perret,17-06-2026 ,nicolas.berthelot
+BD France,,"BD France, construisons l’information géographique de la France.","BD France est le référentiel topographique pour l'action publique : un socle homogène - produit et actualisé sur l'ensemble du territoire par l’IGN - enrichi de données expertes issues de la contribution de partenaires de confiance.     
+
+Cibles principales : géomaticiens/respo SIG, porteurs de politiques publiques  
+
+Propositions de valeur utilisateurs : fiabilité, richesse thématique, interopérabilité 
+
+Propositions de valeur producteurs de données : efficacité et économie, valorisation de la connaissance du territoire, gouvernance partagée, contribution facilitée    
+
+Propositions de valeur prescripteurs : confiance, souveraineté 
+
+Principaux KPI : requêtes support, volume de téléchargements, nb de labellisations ",,,,,,,,,,,,,,,"Marie Gombert, Thierry Lallemant, Sofiane Kriat, Manon Taillebois, Elise-Rachel Mathis, Lucille Ricaud",17-06-2026 ,nicolas.berthelot
+Géodésie,Observation du territoire,"Des références et infrastructures géodésiques accessibles, pérennes, soutenables et souveraines.​",Fournir le socle géodésique souverain de l’interopérabilité de localisation et de qualification des données et du positionnement précis.​,"- La référence géométrie s'appuie sur Galiléo​
+- La référence verticale nationale est soutenable et interopérable avec les références européennes et marines​
+- Les observations géodésiques du territoire sont partagées​
+- L'IGN est référent auprès des acteurs publics dans le domaine du risque et de la Défense","​- Infrastructure RGP compatible avec les standards européens et internationaux​
+- Nouvelle réalisation de la référence géométrique RGF93 calculée avec Galiléo​​
+- POC de détermination des altitudes européennes sur le territoire​
+- Conclusion d'une étude sur la dématérialisation de la référence verticale​
+- Plan de déploiement de la nouvelle infrastructure géodésique fondamentale​
+- Mise en place de la marque collective de réseau ""géodésie""​
+- Intégrer l'offre géodésie/métrologie dans l'accord cadre IGN-Défense​
+- Engager l'évaluation de l'apport de l'InSAR à la métrologie​","- Référence et information géodésiques accessibles (compréhensibles, couts d'accès supportables, …)​
+- Accès à la référence géodésique résilient (perte des GNSS)​
+- Interopérabilité avec les références internationales (ITRF, EVRF, références marines)","- Diffusion de notre expertise, accompagnement des utilisateurs et développement du collaboratif​
+- Intégration des évolutions Galileo & veille techno multitech ?​
+- Evolution des références et infrastructures","- Gestionnaires d'information géographique : IGN, CRIG,  collectivités territoriales​
+- Gestionnaires de réseaux : EDF, SNCF, VNF, CNR, RTE​
+- Acteurs publics de la surveillance du territoire : BRGM, Shom, Cerema, Ineris​","Canaux de communication​
+
+Sites internet et mailings​
+
+Webinaires​
+
+Recueil des retours : ​
+
+CNIG/Commission GEOPOS et groupes de travail​
+
+Webinaires, colloques, mail​","Nombres de téléchargements (données et produits géodésiques)​
+
+Nombre de conventions avec les partenaires​
+
+Retours usagers  (groupes de travail, sollicitations, enquêtes)​
+
+Poids du géopositionnement dans l'étude économique nationale géonumérique​","Produits similaires/complémentaires​
+
+Références et produits géodésique internationaux​
+
+Imagerie, PCRS​
+
+Dépendances​
+
+Externes : Références et infrastructures internationales​",,,,,,,"Pierre Touchent, Charles Velut",13-08-2026 ,nicolas.berthelot
+Space Reference Points,Observation du territoire,Caler des images partout dans le monde avec une précision maitrisée et cohérente ​,Le SRP permet à nos utilisateurs du domaine d’imagerie spatiale de garantir le positionnement absolu de leurs images,"Production initialisée d’une SRPNG mondiale​
+
+Intégration de la SRPNG dans le segment sol PNEO NEXT​
+
+Intégration de la SRP dans le segment sol IRIS ​
+
+Exploitation de la SRP dans la production GS​","Première année d’étude de la SRPNG pour faire évoluer la base afin de répondre aux nouveaux besoins de la DGA​
+
+Négociation des redevances avec ADS pour ce nouveau produit​
+
+Initier la mise en place d’une chaine industrielle de production (presta MALT) pour préparer la production SRPNG mondiale​
+
+Maintenir en conditions opérationnelle la base pour exploitation dans GS2​
+
+​
+
+Intégration de la SRP dans le segment sol IRIS ​
+
+Intégration de la SRP dans le segment sol PNEO NEXT et CO3D​","1- Produit très technique nécessitant un certain niveau d’expertise en géométrie des images​
+
+2- Produit pour le moment inadapté aux images de faibles emprises​
+
+3- Produit de niche,​","1- support apporté au cas par cas, nécessiterait d’être davantage déployé​
+
+2- étude en cours pour évaluer la capacité du produit à évoluer pour répondre à de nouveaux besoins (type images de faible emprise)​
+
+3- Communiquer, former et accompagner la Défense et les industriels​","Dga​
+
+Prospects d'airbus ( international)​","Présentation du produits los de conférences (Washington, Rome/ESA, ISPRS/communauté scientifique)​
+
+Réunions de RETEX faites auprès de la DGA pour récolter les retours utilisateurs mais ces retours restent très macro​
+
+Sensibiliser davantage les armées à l’exploitation de la base​","Réunions de RETEX avec la DGA​
+
+Chiffres d'affaires ( redevance donc directement proportionnel à la vente)​
+
+Nombre d'images calées grace à la SRP​","- Pas de produit similaire dans l’écosystème, présence de produits orthos servant de base de calage mais de moindre qualité​
+
+- Co-production avec Airbus​",,,,,,,Vincent Caillard,13-08-2026 ,nicolas.berthelot
+"BDORTHO – ORTHO-SAT​
+",Observation du territoire,"Une gamme d'orthoimages pour chaque besoin : ​le bon niveau détail, au bon moment, sur votre territoire.​","""Dans le cadre des politiques publiques en lien avec l'aménagement du territoire, nos produits permettent à nos utilisateurs de construire et de mettre à jour leurs référentiels de description du territoire.""","Déployer la nouvelle BDOrtho vraie en remplacement de la BDOrtho & de l'Ortho Express actuelles en lien avec le remplacement de nos caméras​
+
+Mutualiser en partie les programmes BD ORTHO, PCRS & LiDAR​
+
+Déployer l'offre à la demande ORTHO-SAT Pléiades Neo en complément de la BD ORTHO (augmentation de la fréquence d'observation selon les besoins)​
+
+Avoir défini le cadre de l'offre ORTHO-SAT CO3D en remplacement de l'ORTHO-SAT Pléiades​
+
+Elargir l'offre  en données sources selon les cas d'usages confirmés​
+
+Elargir l'offre en facilitant l'accès aux images orientées​","Objectifs : ​
+​
+
+Basculer vers la nouvelle BD ORTHO​
+
+Déployer un programme de MAJ PCRS mutualisé avec celui de la BD ORTHO​
+
+Stabiliser l'offre ORTHO-SAT Pléiades Neo (cadre & spécifications)​
+
+​
+
+Enjeux : ​
+
+​
+
+Poser une gouvernance inspirée de la méthode produit avec des rôles / périmètres clarifiés autour de l'offre en imagerie​
+
+Etudier les modalités de mise en place d'une offre ORTHO-SAT CO3D en remplacement de l'offre ORTHO-SAT Pléiades actuelle (coordination avec les actions pour la défense ?).​
+
+Optimiser nos capacités d'acquisition & de production​
+
+Remplacement des capteurs – Assurer la pérennité de nos capacités d'acquisition​","Suivi de l'évolution du territoire. ​
+2 principales PP : ​
+
+PAC (production du RPG)​
+
+ZAN (production de l'OCS)​
+Toutes PP en lien avec le suivi de l'évolution du territoire nécessitant des images.​","BD ORTHO  : couverture triennale aérienne HR (20 cm) du territoire​
+
+ORTHO-SAT Pléiades Neo  : couverture complémentaire régionale satellite THR (30 cm) selon commande​
+
+ORTHO-SAT Pléiades : couvertures locales satellite THR (70 cm) via DINAMIS selon commande​
+
+ORTHO-SAT SPOT : couverture satellite HR (2,2m) annuelle ​","Producteur de données interne IGN - mise à jour des référentiels produits par l'IGN ​
+dans le cadre de politiques publiques nationales​
+
+Producteur de données externe IGN - appui aux politiques publiques locales​
+
+Géomaticien / Analyste de données - appui aux politiques publiques locales​","Communication : ​
+LinkedIn​
+Lettre d'information​
+Retours utilisateurs : ​
+CRM​
+Ponctuellement : questionnaire / entretiens​","Indicateurs : ​
+Consommation des données en flux & téléchargement​
+​Impact : ​
+Quantitatif : questionnaire ​
+Qualitatifs : entretiens & ateliers​","Produits similaires : ​
+PCRS, Sentinel 2​. Apportent une complémentarité en matière de précision pour le PCRS (5 cm), de redondance pour les images Sentinel 2 (10m, possibilité d'obtenir des ortho gratuites quotidiennement). ​
+​
+Dépendances produits internes : ​
+BDPote (Ortho-Express & BD ORTHO), BDCarrefour, SRP France (ORTHO-SAT), MNT (BD ORTHO & ORTHO-SAT), MNS Correl (Ortho-Express)​",,,,,,,Régis Bellot,13-08-2026 ,nicolas.berthelot
+PCRS,Observation du territoire,"Les images orientées (produit intermédiaire du PCRS) portent en elles le potentiel d'être un élément important, voire indispensable, à la réalisation de JUNN ​","Pour la réforme dite « anti-endommagement », le PCRS permet de géoréférencer les réseaux souterrains existants et de leur offrir un socle de référence commun avec une précision à mieux que 10 cm »​","La primo acquisition du PCRS aura été réalisée.​
+ Sa mise à jour s’appuiera sur des offres complémentaires non nécessairement exclusives, adaptées à des besoins différents : réfection totale en 5 cm, par patchs, et/ou par un PCRS 8 cm répondant a minima à la législation...  ​","– Valider la faisabilité technique du PCRS 8cm et son acceptation par les partenaires​
+
+​
+
+– Basculer quelques acquisitions 20 cm vers du 8 cm ​
+
+​
+
+– Préparer un programme de basculement plus ambitieux pour 2028​","– Mise à jour (patch, totale)​
+
+– Mutualisation des financements​
+
+– Accès aux données (open data ou pas…)​","– Offre complémentaire d’un « PCRS 8cm »​
+
+– Mutualisation PCRS 8cm è Ortho 20cm, injection de la SCSP du 20cm + compléments locaux et nationaux​",– Départements au programme d’acquisition BDOrtho ​,"– Conférences, webinaires…​
+
+– Contacts directs 1-1​","– Taux de couverture nationale (suivi)​
+
+– Fréquence des mises à jour (à faire)​
+
+Baisse des incidents chantiers (plus fait)​","– Référentiel -> aucun vrai concurrent​
+
+– PCRS vecteur = seconde forme du PCRS​",,,,,,,Audrey Boulard,13-08-2026 ,nicolas.berthelot
+LidarHD,Observation du territoire,"Une donnée 3D de qualité comprenant sol et sur sol, facilement ​",​Le programme LiDAR HD a pour objectif la description en 3D du territoire français et DROM compris à terme. Le programme répond aux besoins d’observation et d’analyse spatiale du territoire au profit des politique public.,,"Définir et valider la stratégie de revisite du territoire en LiDAR HD​
+
+Faire contractualiser des commanditaires​
+
+Planifier et organiser la revisite​
+
+Redéfinir le qui fait quoi​","Vulgariser une donnée vue comme complexe​
+
+Améliorer la communication sur le programme (soutien utilisateurs, revisite, etc.)​
+
+Réorganiser le « Qui fait quoi » en mode produit​","Creer des fiches sur la donnée (débutant / intermédaire / expert)​
+
+Mieux communiquer avec les utilisateurs (relancer l'animation et le lien avec les utilisateurs, valider la communication sur la revisite)​
+
+Réécrire le « Qui fait quoi »​","ONF​
+
+DGPR​
+
+Régions​","Ateliers utilisateurs / webinaire LiDAR HD​
+
+Communauté LiDAR HD​","Actuellement, le taux d’usage n’est vu que par :​
+
+les cas d’usage fourni par nos commanditaires​
+
+des publications web sur le sujet LiDAR ​
+
+le nombre de DL des données LiDAR","En interne IGN : lien avec France Relief et JUNN​
+
+En externe prestations fournies par nos prestataires sur la captation​",,,,,,,,13-08-2026 ,nicolas.berthelot
+France RELIEF,,"Une modélisation précise et à jour du relief et du sursol sur l'ensemble du territoire , adaptée aux usages ​​","Fournir une modélisation précise et à jour du relief et du sursol sur l'ensemble du territoire , adaptée aux usages ​","Initialisation de France Relief en 2 ans + processus de MAJ en place ​
+
+Lancer formellement France Relief à la fin officielle du programme LiDAR HD​
+
+MAJ des produits dérivés cartographiques à partir des données LiDAR HD ​
+
+Mettre en place les interfaces de téléchargement et le bon parcours utilisateur sur Cartes.gouv ​","Clarifier le discours auprès des usagers et commanditaires LidAR sur France Relief et son articulation avec la MAJ LiDAR  ​
+
+​
+
+Assurer une bonne articulation avec la gouvernance des acquisitions et productions 3D​
+
+​
+
+Initier une gouvernance produit via la communauté LiDAR HD ​
+
+​
+
+Publier  d'ici fin 2027 les premières zones France Relief initialisées ​","Disposer d'un MNT/S a jour et détaillé (50cm) sur mon emprise de travail​
+
+Accéder facilement à l'ensemble des millésimes de MNT/S produits sur mon emprise de travail ​
+
+Disposer d'une représentation cartographique du relief (ombrages pentes courbes) prêt à l'emploi sans avoir à la recalculer soi même  ​","MNT France Relief, entretenu avec les données LiDar et images disponibles ​
+
+Interface d' extraction ou listing des flux de données qui sont capables de récupérer les différents millésimes de MNT et MNS  souhaités ​
+
+Produit sur étagère Courbes / ombrages et pentes, éventuellement stylisable à la volée (TMS)​","Acteurs sur la communauté LiDAR HD ​
+
+DREAL / DDT / DGPR​
+
+SDIS / Collectivités​
+
+Bureaux d'études ​","Lettre d'info IGN Pro​
+
+Communauté LiDAR HD​","Suivi du téléchargement / consommation des flux de visualisation​
+
+Nb et cas d'usages repartagés sur les réseaux sociaux, data gouv et la communauté LiDAR HD ​
+​
+Questionnaire et entretiens utilisateurs","MNT/MNS et MNH LidAR HD : remplacement progressif ? ​
+Dépendance forte à Cartes.gouv et Géoplateforme​
+
+Dépendance forte aux données sources / 3D disponibles ​",,,,,,,Sofiane Kriat,13-08-2026 ,nicolas.berthelot
+GEOSOCLE 2,Observation du territoire,"Produire des socles de référence partout dans le monde selon la directive​ de production actualisée par le MINARM avec de mutiples capteurs (SPOT,​ Pléiades Néo, CO3D, etc.), des performances​ reproductibles et dans des délais maîtrisés​","GEOSOCLE 2 (marché MINARM/DGA vers Airbus DS et IGN) complète le patrimoine Défense en données géographiques de référence mondiales (i.e. socles de calage d'images, d'altimétrie qualifiée de référence, de radiométrie, d'altimétrie pour l'orthorectification et modèles numériques fins MNS, MNT et MNH sur des emprises urbaines + MNS texturés)​","Coproduire annuellement les km² de ""socles"" de référence (orthos, MNx, etc.) prévus dans la directive de production actualisée​
+
+Intégrer de nouveaux capteurs (ex. CO3D) et préparer GS3​
+
+Coproduire et exploiter la SRP et la SRP NG (si actée)","Avenant n°2 réintégrant la source image CO3D​
+
+Finir la production prévue en TOP3 et démarrer celle de la TOP4​
+
+Mettre en place la filière de production CO3D et initier les premières productions avec cette source​
+
+​Produire la SRP NG si actée​","Nouveaux capteurs (ex. CO3D)​
+
+Performances et délais contraints dans le cadre du programme GEODE 4D de MINARM/DGA pour alimenter les forces en données et services assurant une vision partagée de l'environnement géophysique​","Étude du patrimoine Défense (pour guider le choix des zones)​
+
+Pilotage de l'acquisition des images source et des filières d'élaboration​
+
+Qualification indépendante par l'IGN et participation aux standards alliés​","DGA et autres acteurs Défense​
+GEOMAPS​","Réunions contractuelles très cadrées par la DGA​
+
+Réunions de RETEX via la DGA pour récolter les retours utilisateurs","- nombre de km² produits par an selon les chantiers, délais et précisions de la directive de production actualisée par le MINARM​
+
+- ​retours des utilisateurs finaux notamment GEOMAPS (via MINARM/DGA ou EMA)​","Utilise T-REx et SRP (p. ex. pour GEOMAPS)​
+
+Il existe probablement des bases de données alliées (mais non directement accessibles)​",,,,,,,"Matthieu Le Masson, Stéphane Pelle",13-08-2026 ,nicolas.berthelot
+Hub des Sources,Observation du territoire,Un accès **simple** et **unifié** aux données d'observation de la Terre​ satellite et aériennes sur le territoire national​,"Offrir un accès unifié et performant aux données multi-sources et historiques, au niveau de traitement le plus pertinent, et les transformer en services opérationnels pour amplifier les usages.​","Le point d'accès national de référence aux données d'observation de la Terre, articulé à la Géoplateforme et Geodes permettant de faciliter et maximiser l'usage auprès des utilisateurs​","### Objectifs 2027 :​
+- **Interne** : Enrichissement en sources, élargissement des fonctionnalités pour faciliter l’intégration dans les chaînes de traitement​
+- **Interne avec données externe** : MVP des premières briques d'interconnexion entre Geodes et Cartes.gouv et trouver un modèle de gouvernance​
+- **Externe** : Développer un MVP pour les utilisateurs externes en s'appuyant sur cartes.gouv et la Geoplateforme​
+
+### Enjeux 2027​
+
+- Simplifier l'accès à la donnée pour les développeurs​
+- Renforcer l'interopérabilité entre Geodes et la Geoplateforme​
+- Mutualiser certains développements entre Data Terra et IGN​
+- Positionner l'IGN comme point d'entrée de référence pour les données d'observation de la Terre pour les collectivités territoriales sur le territoire national​","- Absence d'un accès simple et unifié à la donnée source​
+- Multiplicité des plateformes et des fournisseurs de données​
+- Hétérogénéité des formats, métadonnées et modes d'accès​
+- Faire gagner du temps à nos utilisateurs​","- Point d'entrée unique vers plusieurs fournisseurs de données / sources​
+- Recherche harmonisée par zone, période, capteur et fournisseur​
+- Téléchargement standardisé via interface web et API​","Utilisateur interne : Développeurs et ingénieur en Machine Learning​
+
+Utilisateur externe : Géomaticien​
+
+Utilisateur externe : Développeurs et ingénieur en Machine Learning​","- Utilisateur interne : Démo, retour utilisateurs​
+- Utilisateur externe : Entretiens utilisateurs, réseau cartes.gouv ​​","- Nombre d'utilisateurs actifs​
+- Nombre de téléchargements et volume de données diffusées​
+- Nombre de fournisseurs et jeux de données référencés​","- Appui sur cartes.gouv et Geoplateforme​
+- Interropérabilité avec Geodes, Dinamis et Data Terra / Gaia Data​
+
+Rôle : Couche d'accès unifiée aux données d'observation de la Terre​",,,,,,,Thomas Sitbon,13-08-2026 ,nicolas.berthelot
+Panoramax,Observation du territoire,"Plusieurs instances publiques en France​
+
+Une couverture France quasi exhaustive​","Une alternative libre et souveraine pour partager et utiliser des photos de terrain​
+
+3 mots-clés : libre, décentralisé, collaboratif","La référence mondiale pour partager et utiliser librement des photos de terrain​
+
+Une gouvernance transférée à la fondation Panoramax​","Plusieurs instances publiques en France​
+
+Continuer de déployer le commun (national et international)​
+
+Plus de données sémantiques​
+
+Une fondation opérationnelle​
+
+Poursuivre le travail fait avec les éditeurs de logiciels SIG​","Manque de données fraîches et absence de photos à certains endroits​
+
+Déplacements terrain : comment les réduire et les optimiser ?​
+
+Risque juridique et dépendance à des solutions non souveraines, privées, ...​","Une stack logicielle open source​
+
+Fond de photos​
+
+Partage facilité des photos de terrain : anonymisation et diffusion open data​
+
+Sémantisation : tags, détections d'objets​
+
+Hébergement décentralisé : autonomie, favorise la gouvernance ouverte, fédéré au sein du méta-catalogue​","Les collectivités​
+
+Les opérateurs de l'Etat​
+
+L'international​",,"Nb de photos versées et consultées​
+
+Nb de contributeurs et contributrices actives​
+
+Nb d'instances publiques​
+
+Enquête usages 2025 : note moyenne d'utilité (8/10), réduction des déplacements (68% d'accord), amélioration de la donnée exploitée (89% d'accord)​","Complémentaires : intégration dans applications, logiciels, outils SIG (libres et propriétaires) et sites web​
+
+""Similaires"" : Google Street View, Mapillary, KartaView, autres visionneuses notamment propriétaires, …​
+
+Sans dépendance externe, ni interne",https://panoramax.fr/,https://gitlab.com/panoramax,https://panoramax.fr/stats,contact@panoramax.fr,,,"Christian Quest, Amélie Crépin",13-08-2026 ,nicolas.berthelot

@@ -1,0 +1,128 @@
+---
+import Base from "../../layouts/Base.astro";
+import produits from "../../data/produits.json";
+
+export function getStaticPaths() {
+  return produits.map((p) => ({
+    params: { slug: p.slug },
+    props: { produit: p },
+  }));
+}
+
+const { produit: p } = Astro.props;
+
+const resources = [
+  { label: "Site web", value: p.siteWeb, external: true },
+  { label: "Code source", value: p.codeSource, external: true },
+  { label: "Statistiques d'usage", value: p.statistiquesUsage, external: true },
+  { label: "RACI", value: p.raci, external: true },
+  { label: "Budget", value: p.budget, external: true },
+].filter((r) => r.value);
+
+const contentSections = [
+  { label: "Proposition de valeur", value: p.propositionValeur },
+  { label: "Problèmes adressés", value: p.problemes },
+  { label: "Solutions apportées", value: p.solutions },
+  { label: "Canaux de déploiement", value: p.canauxDeploiement },
+  { label: "Impact et indicateurs", value: p.impactIndicateurs },
+  { label: "Positionnement dans l'écosystème", value: p.positionnementEcosysteme },
+  { label: "Vision à 5 ans", value: p.vision5ans },
+  { label: "Cibles prioritaires", value: p.ciblesPrioritaires },
+  { label: "Principaux objectifs (1 an)", value: p.objectifs1an },
+].filter((s) => s.value);
+
+function isUrl(v: string) {
+  return /^https?:\/\//i.test(v.trim());
+}
+---
+<Base title={p.nom} description={p.promesse || p.propositionValeur}>
+  <div class="fr-container fr-mt-3w">
+    <nav role="navigation" class="fr-breadcrumb" aria-label="vous êtes ici :">
+      <button class="fr-breadcrumb__button" aria-expanded="false" aria-controls="breadcrumb">Voir le fil d'Ariane</button>
+      <div class="fr-collapse" id="breadcrumb">
+        <ol class="fr-breadcrumb__list">
+          <li><a class="fr-breadcrumb__link" href={import.meta.env.BASE_URL}>Accueil</a></li>
+          <li><a class="fr-breadcrumb__link" aria-current="page">{p.nom}</a></li>
+        </ol>
+      </div>
+    </nav>
+  </div>
+
+  <section class="ign-hero">
+    <div class="fr-container">
+      {p.offre && <p class="fr-badge fr-badge--yellow-tournesol fr-mb-2w">{p.offre}</p>}
+      <h1 class="fr-mb-2w">{p.nom}</h1>
+      {p.promesse && <p class="fr-text--lead" style="max-width: 46rem;">{p.promesse}</p>}
+    </div>
+  </section>
+
+  <div class="fr-container fr-py-6w">
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div class="fr-col-12 fr-col-md-8">
+        {contentSections.map((s) => (
+          <section class="fr-mb-4w">
+            <h2 class="fr-h4">{s.label}</h2>
+            <p style="white-space: pre-line;">{s.value}</p>
+          </section>
+        ))}
+        {contentSections.length === 0 && (
+          <p class="fr-text--sm" style="color: var(--text-mention-grey, #666);">
+            Cette fiche produit n'a pas encore été complétée par l'équipe.
+          </p>
+        )}
+      </div>
+
+      <div class="fr-col-12 fr-col-md-4">
+        <div class="fr-card fr-card--no-arrow fr-card--grey fr-mb-3w">
+          <div class="fr-card__body">
+            <div class="fr-card__content">
+              <h2 class="fr-h6 fr-mb-2w">Liens et ressources</h2>
+              {resources.length > 0 ? (
+                <ul class="fr-btns-group fr-btns-group--icon-left fr-btns-group--sm">
+                  {resources.map((r) => (
+                    <li>
+                      {isUrl(r.value) ? (
+                        <a class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-external-link-line fr-btn--sm" style="width: 100%; justify-content: flex-start;" href={r.value} target="_blank" rel="noopener noreferrer">
+                          {r.label}
+                        </a>
+                      ) : (
+                        <p class="fr-text--sm fr-mb-1w"><strong>{r.label} :</strong> {r.value}</p>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p class="fr-text--sm">Aucune ressource renseignée.</p>
+              )}
+
+              {p.contact && (
+                <>
+                  <h2 class="fr-h6 fr-mt-4w fr-mb-1w">Contact</h2>
+                  <p class="fr-text--sm">{p.contact}</p>
+                </>
+              )}
+
+              {p.equipe && (
+                <>
+                  <h2 class="fr-h6 fr-mt-4w fr-mb-1w">Équipe</h2>
+                  <p class="fr-text--sm">{p.equipe}</p>
+                </>
+              )}
+
+              {p.derniereMiseAJour && (
+                <p class="ign-updated fr-mt-4w">
+                  Dernière mise à jour le {p.derniereMiseAJour.trim()}
+                  {p.derniereMiseAJourPar && ` par ${p.derniereMiseAJourPar}`}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fr-mt-4w">
+      <a class="fr-link fr-icon-arrow-left-line fr-link--icon-left" href={import.meta.env.BASE_URL}>Retour au catalogue</a>
+    </div>
+  </div>
+</Base>
