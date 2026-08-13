@@ -20,15 +20,15 @@ const resources = [
 ].filter((r) => r.value);
 
 const contentSections = [
-  { label: "Proposition de valeur", value: p.propositionValeur },
-  { label: "Problèmes adressés", value: p.problemes },
-  { label: "Solutions apportées", value: p.solutions },
-  { label: "Canaux de déploiement", value: p.canauxDeploiement },
-  { label: "Impact et indicateurs", value: p.impactIndicateurs },
-  { label: "Positionnement dans l'écosystème", value: p.positionnementEcosysteme },
-  { label: "Vision à 5 ans", value: p.vision5ans },
-  { label: "Cibles prioritaires", value: p.ciblesPrioritaires },
-  { label: "Principaux objectifs (1 an)", value: p.objectifs1an },
+  { key: "propositionValeur", label: "Proposition de valeur", value: p.propositionValeur },
+  { key: "problemes", label: "Problèmes adressés", value: p.problemes },
+  { key: "solutions", label: "Solutions apportées", value: p.solutions },
+  { key: "canauxDeploiement", label: "Canaux de déploiement", value: p.canauxDeploiement },
+  { key: "impactIndicateurs", label: "Impact et indicateurs", value: p.impactIndicateurs },
+  { key: "positionnementEcosysteme", label: "Positionnement dans l'écosystème", value: p.positionnementEcosysteme },
+  { key: "vision5ans", label: "Vision à 5 ans", value: p.vision5ans },
+  { key: "ciblesPrioritaires", label: "Cibles prioritaires", value: p.ciblesPrioritaires },
+  { key: "objectifs1an", label: "Principaux objectifs (1 an)", value: p.objectifs1an },
 ].filter((s) => s.value);
 
 function isUrl(v: string) {
@@ -58,9 +58,24 @@ function isUrl(v: string) {
 
   <div class="fr-container fr-py-6w">
     <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-12 fr-col-md-8">
+      {contentSections.length > 0 && (
+        <div class="fr-col-12 fr-col-md-3">
+          <nav class="fr-summary ign-toc" role="navigation" aria-labelledby="fr-summary-title">
+            <p class="fr-summary__title" id="fr-summary-title">Sommaire</p>
+            <ol class="fr-summary__list">
+              {contentSections.map((s) => (
+                <li>
+                  <a class="fr-summary__link" href={`#${s.key}`}>{s.label}</a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        </div>
+      )}
+
+      <div class={contentSections.length > 0 ? "fr-col-12 fr-col-md-6" : "fr-col-12 fr-col-md-8"}>
         {contentSections.map((s) => (
-          <section class="fr-mb-4w">
+          <section class="fr-mb-4w" id={s.key}>
             <h2 class="fr-h4">{s.label}</h2>
             <p style="white-space: pre-line;">{s.value}</p>
           </section>
@@ -72,7 +87,7 @@ function isUrl(v: string) {
         )}
       </div>
 
-      <div class="fr-col-12 fr-col-md-4">
+      <div class="fr-col-12 fr-col-md-3">
         <div class="fr-card fr-card--no-arrow fr-card--grey fr-mb-3w">
           <div class="fr-card__body">
             <div class="fr-card__content">

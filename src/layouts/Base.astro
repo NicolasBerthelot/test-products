@@ -15,7 +15,7 @@ const DSFR_VERSION = "1.15.2";
   <title>{title} · Produits IGN</title>
   <link rel="stylesheet" href={`https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@${DSFR_VERSION}/dist/dsfr.min.css`} />
   <link rel="icon" href={`https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@${DSFR_VERSION}/dist/favicon/favicon.svg`} type="image/svg+xml" />
-  <style>
+  <style is:global>
     :root {
       --ign-vert: #00524C;
       --ign-vert-clair: #1E7A6F;
@@ -70,6 +70,16 @@ const DSFR_VERSION = "1.15.2";
     .ign-updated {
       font-size: 0.8125rem;
       color: var(--text-mention-grey, #666);
+    }
+    .ign-toc {
+      position: sticky;
+      top: 1.5rem;
+    }
+    .ign-toc .fr-summary__link::before {
+      content: none;
+    }
+    [id] {
+      scroll-margin-top: 1.5rem;
     }
   </style>
 </head>
