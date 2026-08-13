@@ -17,12 +17,21 @@ import unicodedata
 from datetime import datetime, timezone
 
 import requests
+from requests.adapters import HTTPAdapter, Retry
 
 try:
     from dotenv import load_dotenv
     load_dotenv()
 except ImportError:
     pass
+
+# Le job GitHub Actions tourne toutes les heures sans supervision : on absorbe
+# les aléas réseau transitoires (reset TLS, timeout, 5xx) plutôt que de faire
+# échouer tout le déploiement pour un simple hoquet de connexion.
+_session = requests.Session()
+_retries = Retry(total=4, backoff_factor=2, status_forcelist=[429, 500, 502, 503, 504])
+_session.mount("https://", HTTPAdapter(max_retries=_retries))
+_session.mount("http://", HTTPAdapter(max_retries=_retries))
 
 # Colonnes Grist (libellés humains, tels qu'affichés dans l'éditeur Grist)
 # -> clé correspondante dans produits.json
@@ -81,7 +90,7 @@ def clean_scalar(v, label: str = ""):
 
 
 def fetch_json(url: str, api_key: str):
-    resp = requests.get(url, headers={"Authorization": f"Bearer {api_key}"}, timeout=30)
+    resp = _session.get(url, headers={"Authorization": f"Bearer {api_key}"}, timeout=30)
     resp.raise_for_status()
     return resp.json()
 
