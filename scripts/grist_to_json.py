@@ -50,6 +50,8 @@ LABEL_TO_KEY = {
     "Principaux objectifs (1 an)": "objectifs1an",
 }
 
+DATE_FIELDS = {"Dernière mise à jour"}
+
 
 def slugify(s: str) -> str:
     s = unicodedata.normalize("NFKD", s).encode("ascii", "ignore").decode()
@@ -57,10 +59,8 @@ def slugify(s: str) -> str:
     return s
 
 
-DATE_FIELDS = {"Dernière mise à jour"}
-
-
-def clean(v, label: str = ""):
+def clean_scalar(v, label: str = ""):
+    """Nettoie une valeur déjà résolue en texte/nombre (pas une référence)."""
     if v is None:
         return None
     if isinstance(v, bool):
@@ -73,8 +73,7 @@ def clean(v, label: str = ""):
             except (OverflowError, OSError, ValueError):
                 return str(v)
         # Une valeur numérique sur un champ censé être du texte indique en général
-        # une colonne mal identifiée (Reference/formule) plutôt qu'une vraie donnée :
-        # on l'ignore plutôt que d'afficher une valeur trompeuse.
+        # une colonne mal identifiée plutôt qu'une vraie donnée : on l'ignore.
         print(f"Attention : valeur numérique inattendue pour '{label}' ({v!r}), ignorée", file=sys.stderr)
         return None
     v = str(v).strip()
@@ -87,24 +86,78 @@ def fetch_json(url: str, api_key: str):
     return resp.json()
 
 
-def build_label_to_colid(base_url: str, doc_id: str, table: str, api_key: str) -> dict:
-    data = fetch_json(f"{base_url}/api/docs/{doc_id}/tables/{table}/columns", api_key)
+def fetch_columns(base_url: str, doc_id: str, table: str, api_key: str) -> list:
+    return fetch_json(f"{base_url}/api/docs/{doc_id}/tables/{table}/columns", api_key).get("columns", [])
+
+
+def build_label_to_column(base_url: str, doc_id: str, table: str, api_key: str) -> dict:
+    """label -> {"colId": ..., "type": ...} (type ex: 'Text', 'Ref:Offre', 'RefList:Equipe', 'Date')."""
     mapping = {}
-    for col in data.get("columns", []):
+    for col in fetch_columns(base_url, doc_id, table, api_key):
         fields = col.get("fields", {}) or {}
         label = fields.get("label")
         if not label:
             continue
         label = label.strip()
-        if label in mapping and mapping[label] != col["id"]:
+        if label in mapping and mapping[label]["colId"] != col["id"]:
             print(
                 f"Attention : plusieurs colonnes Grist portent le libellé '{label}' "
-                f"({mapping[label]!r} et {col['id']!r}) — la première trouvée est utilisée.",
+                f"({mapping[label]['colId']!r} et {col['id']!r}) — la première trouvée est utilisée.",
                 file=sys.stderr,
             )
             continue
-        mapping[label] = col["id"]
+        mapping[label] = {"colId": col["id"], "type": fields.get("type", "Text")}
     return mapping
+
+
+def build_reference_map(base_url: str, doc_id: str, ref_table: str, api_key: str) -> dict:
+    """{row_id: texte affiché} pour une table de référence simple (ex: table Offre)."""
+    columns = fetch_columns(base_url, doc_id, ref_table, api_key)
+    text_col_id = None
+    for col in columns:
+        fields = col.get("fields", {}) or {}
+        col_type = fields.get("type", "Text")
+        if col_type == "Text" or col_type == "Choice":
+            text_col_id = col["id"]
+            break
+    if text_col_id is None and columns:
+        text_col_id = columns[0]["id"]
+
+    records = fetch_json(f"{base_url}/api/docs/{doc_id}/tables/{ref_table}/records", api_key).get("records", [])
+    ref_map = {}
+    for r in records:
+        value = (r.get("fields", {}) or {}).get(text_col_id) if text_col_id else None
+        ref_map[r["id"]] = clean_scalar(value, ref_table)
+    return ref_map
+
+
+def resolve_value(raw, col_type: str, label: str, base_url: str, doc_id: str, api_key: str, ref_cache: dict):
+    """Résout une valeur brute Grist en texte, en suivant les colonnes Reference/RefList."""
+    if raw is None:
+        return None
+
+    if col_type.startswith("Ref:"):
+        ref_table = col_type.split(":", 1)[1]
+        if not isinstance(raw, (int, float)) or raw == 0:
+            return None
+        if ref_table not in ref_cache:
+            ref_cache[ref_table] = build_reference_map(base_url, doc_id, ref_table, api_key)
+        text = ref_cache[ref_table].get(int(raw))
+        if text is None:
+            print(f"Attention : référence introuvable pour '{label}' (table {ref_table}, id={raw!r})", file=sys.stderr)
+        return text
+
+    if col_type.startswith("RefList:"):
+        ref_table = col_type.split(":", 1)[1]
+        if not isinstance(raw, list) or len(raw) < 2:
+            return None
+        if ref_table not in ref_cache:
+            ref_cache[ref_table] = build_reference_map(base_url, doc_id, ref_table, api_key)
+        texts = [ref_cache[ref_table].get(int(rid)) for rid in raw[1:]]
+        texts = [t for t in texts if t]
+        return ", ".join(texts) if texts else None
+
+    return clean_scalar(raw, label)
 
 
 def main(out_path: str):
@@ -113,31 +166,36 @@ def main(out_path: str):
     table = os.environ.get("GRIST_TABLE", "Produits")
     base_url = os.environ.get("GRIST_BASE_URL", "https://grist.numerique.gouv.fr").rstrip("/")
 
-    label_to_colid = build_label_to_colid(base_url, doc_id, table, api_key)
+    label_to_column = build_label_to_column(base_url, doc_id, table, api_key)
 
-    missing = [label for label in LABEL_TO_KEY if label not in label_to_colid]
+    missing = [label for label in LABEL_TO_KEY if label not in label_to_column]
     if missing:
         print(f"Attention : colonnes introuvables dans Grist (ignorées) : {missing}", file=sys.stderr)
 
     records_data = fetch_json(f"{base_url}/api/docs/{doc_id}/tables/{table}/records", api_key)
     records = records_data.get("records", [])
 
+    ref_cache: dict = {}
+
+    def get(label, fields):
+        col = label_to_column.get(label)
+        if not col:
+            return None
+        raw = fields.get(col["colId"])
+        return resolve_value(raw, col["type"], label, base_url, doc_id, api_key, ref_cache)
+
     products = []
     last_offre = None
     for record in records:
         fields = record.get("fields", {})
 
-        def get(label):
-            col_id = label_to_colid.get(label)
-            return fields.get(col_id) if col_id else None
-
-        nom = clean(get("Nom du produit"), "Nom du produit")
+        nom = get("Nom du produit", fields)
         if not nom:
             continue
 
         # L'"Offre" peut être vide sur certaines lignes selon la vue Grist utilisée
         # (cellules groupées) : on propage la dernière valeur connue, comme pour le CSV.
-        offre = clean(get("Offre"), "Offre")
+        offre = get("Offre", fields)
         if offre is None:
             offre = last_offre
         else:
@@ -147,7 +205,7 @@ def main(out_path: str):
         for label, key in LABEL_TO_KEY.items():
             if key == "nom":
                 continue
-            product[key] = offre if key == "offre" else clean(get(label), label)
+            product[key] = offre if key == "offre" else get(label, fields)
 
         products.append(product)
 
