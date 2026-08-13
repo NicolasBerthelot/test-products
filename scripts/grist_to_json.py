@@ -57,15 +57,26 @@ def slugify(s: str) -> str:
     return s
 
 
-def clean(v):
+DATE_FIELDS = {"Dernière mise à jour"}
+
+
+def clean(v, label: str = ""):
     if v is None:
         return None
+    if isinstance(v, bool):
+        return str(v)
     if isinstance(v, (int, float)):
-        # Colonnes de type Date/DateTime : Grist renvoie un timestamp Unix (secondes, UTC).
-        try:
-            return datetime.fromtimestamp(v, tz=timezone.utc).strftime("%d-%m-%Y")
-        except (OverflowError, OSError, ValueError):
-            return str(v)
+        if label in DATE_FIELDS:
+            # Colonne Date/DateTime : Grist renvoie un timestamp Unix (secondes, UTC).
+            try:
+                return datetime.fromtimestamp(v, tz=timezone.utc).strftime("%d-%m-%Y")
+            except (OverflowError, OSError, ValueError):
+                return str(v)
+        # Une valeur numérique sur un champ censé être du texte indique en général
+        # une colonne mal identifiée (Reference/formule) plutôt qu'une vraie donnée :
+        # on l'ignore plutôt que d'afficher une valeur trompeuse.
+        print(f"Attention : valeur numérique inattendue pour '{label}' ({v!r}), ignorée", file=sys.stderr)
+        return None
     v = str(v).strip()
     return v if v else None
 
@@ -80,9 +91,19 @@ def build_label_to_colid(base_url: str, doc_id: str, table: str, api_key: str) -
     data = fetch_json(f"{base_url}/api/docs/{doc_id}/tables/{table}/columns", api_key)
     mapping = {}
     for col in data.get("columns", []):
-        label = (col.get("fields", {}) or {}).get("label")
-        if label:
-            mapping[label.strip()] = col["id"]
+        fields = col.get("fields", {}) or {}
+        label = fields.get("label")
+        if not label:
+            continue
+        label = label.strip()
+        if label in mapping and mapping[label] != col["id"]:
+            print(
+                f"Attention : plusieurs colonnes Grist portent le libellé '{label}' "
+                f"({mapping[label]!r} et {col['id']!r}) — la première trouvée est utilisée.",
+                file=sys.stderr,
+            )
+            continue
+        mapping[label] = col["id"]
     return mapping
 
 
@@ -110,13 +131,13 @@ def main(out_path: str):
             col_id = label_to_colid.get(label)
             return fields.get(col_id) if col_id else None
 
-        nom = clean(get("Nom du produit"))
+        nom = clean(get("Nom du produit"), "Nom du produit")
         if not nom:
             continue
 
         # L'"Offre" peut être vide sur certaines lignes selon la vue Grist utilisée
         # (cellules groupées) : on propage la dernière valeur connue, comme pour le CSV.
-        offre = clean(get("Offre"))
+        offre = clean(get("Offre"), "Offre")
         if offre is None:
             offre = last_offre
         else:
@@ -126,7 +147,7 @@ def main(out_path: str):
         for label, key in LABEL_TO_KEY.items():
             if key == "nom":
                 continue
-            product[key] = offre if key == "offre" else clean(get(label))
+            product[key] = offre if key == "offre" else clean(get(label), label)
 
         products.append(product)
 
