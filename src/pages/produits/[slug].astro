@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import produits from "../../data/produits.json";
+import { renderMarkdown } from "../../lib/markdown";
 
 export function getStaticPaths() {
   return produits.map((p) => ({
@@ -43,8 +44,15 @@ const defaultAvatar = `${import.meta.env.BASE_URL}agent.png`;
 // automatiquement, toujours la même, sans avoir à coder chaque code en dur.
 const TAG_PALETTE = ["#0063CB", "#6E445A", "#00694E", "#8D533E", "#417DC4", "#A558A0", "#6A6156", "#C36F31"];
 
+// "Prestataire" hashait sur la même couleur que "DSI" (collision de hash) ;
+// couleur dédiée hors palette pour la distinguer sans risquer une nouvelle collision.
+const TAG_COLOR_OVERRIDES: Record<string, string> = {
+  Prestataire: "#B3261E",
+};
+
 function serviceColor(service: string) {
   const direction = service.split("/")[0].trim();
+  if (TAG_COLOR_OVERRIDES[direction]) return TAG_COLOR_OVERRIDES[direction];
   let hash = 0;
   for (const char of direction) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
   return TAG_PALETTE[hash % TAG_PALETTE.length];
@@ -102,7 +110,7 @@ function serviceColor(service: string) {
         {contentSections.map((s) => (
           <section class="fr-mb-4w" id={s.key}>
             <h2 class="fr-h4">{s.label}</h2>
-            <p style="white-space: pre-line;">{s.value}</p>
+            <div class="ign-markdown" set:html={renderMarkdown(s.value)} />
           </section>
         ))}
         {contentSections.length === 0 && (
