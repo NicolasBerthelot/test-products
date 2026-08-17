@@ -11,7 +11,8 @@ function normalize(s: string) {
 }
 
 function searchIndex(p: (typeof produits)[number]) {
-  return normalize([p.nom, p.promesse, p.equipe].filter(Boolean).join(" "));
+  const noms = (p.equipe ?? []).map((membre) => membre.nom);
+  return normalize([p.nom, p.promesse, ...noms].filter(Boolean).join(" "));
 }
 ---
 <Base title="Accueil" description="Découvrez les produits numériques développés par l'IGN : référentiels, observation du territoire et services associés.">

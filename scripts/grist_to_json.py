@@ -52,7 +52,6 @@ LABEL_TO_KEY = {
     "Contact": "contact",
     "RACI": "raci",
     "Budget": "budget",
-    "Equipe": "equipe",
     "Dernière mise à jour": "derniereMiseAJour",
     "Dernière mise à jour par": "derniereMiseAJourPar",
     "Vision à 5 ans": "vision5ans",
@@ -62,9 +61,12 @@ LABEL_TO_KEY = {
 
 DATE_FIELDS = {"Dernière mise à jour"}
 
-# Colonne "Image" facultative : URL texte directe, ou pièce jointe Grist
-# (téléchargée au moment du build et re-hébergée dans public/images/).
-IMAGES_DIR = Path(__file__).resolve().parent.parent / "public" / "images"
+# Colonnes "Image" (table Produits) et "Photo" (table Equipes), facultatives :
+# URL texte directe, ou pièce jointe Grist téléchargée au moment du build et
+# re-hébergée dans public/images/ ou public/agents/.
+PUBLIC_DIR = Path(__file__).resolve().parent.parent / "public"
+IMAGES_DIR = PUBLIC_DIR / "images"
+AGENTS_DIR = PUBLIC_DIR / "agents"
 
 
 def slugify(s: str) -> str:
@@ -153,18 +155,17 @@ def build_reference_map(base_url: str, doc_id: str, ref_table: str, api_key: str
     return ref_map
 
 
-def resolve_image(fields: dict, label_to_column: dict, slug: str, base_url: str, doc_id: str, api_key: str):
-    """URL d'illustration produit : URL texte directe, ou pièce jointe Grist
-    téléchargée au moment du build et re-hébergée dans public/images/."""
-    col = label_to_column.get("Image")
-    if not col:
-        return None
-    raw = fields.get(col["colId"])
+def resolve_attachment_or_url(
+    raw, col_type: str, dest_dir: Path, dest_stem: str, base_url: str, doc_id: str, api_key: str, label: str
+):
+    """Résout une colonne Image/Photo : URL texte directe telle quelle, ou
+    pièce jointe Grist téléchargée au moment du build et re-hébergée sous
+    public/<dest_dir.name>/<dest_stem>.<ext>."""
     if raw is None:
         return None
 
-    if col["type"] != "Attachments":
-        return clean_scalar(raw, "Image")
+    if col_type != "Attachments":
+        return clean_scalar(raw, label)
 
     if not isinstance(raw, list) or len(raw) < 2:
         return None
@@ -179,14 +180,60 @@ def resolve_image(fields: dict, label_to_column: dict, slug: str, base_url: str,
         )
         resp.raise_for_status()
     except requests.exceptions.RequestException as e:
-        print(f"Attention : téléchargement impossible pour l'image de '{slug}' (pièce jointe {attachment_id}) : {e}", file=sys.stderr)
+        print(f"Attention : téléchargement impossible pour '{label}' ({dest_stem}, pièce jointe {attachment_id}) : {e}", file=sys.stderr)
         return None
 
     filename = (meta.get("fields", meta) or {}).get("fileName") or str(attachment_id)
     ext = os.path.splitext(filename)[1] or ".jpg"
-    IMAGES_DIR.mkdir(parents=True, exist_ok=True)
-    (IMAGES_DIR / f"{slug}{ext}").write_bytes(resp.content)
-    return f"images/{slug}{ext}"
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    (dest_dir / f"{dest_stem}{ext}").write_bytes(resp.content)
+    return f"{dest_dir.name}/{dest_stem}{ext}"
+
+
+def resolve_image(fields: dict, label_to_column: dict, slug: str, base_url: str, doc_id: str, api_key: str):
+    """URL d'illustration produit (colonne "Image" de la table Produits)."""
+    col = label_to_column.get("Image")
+    if not col:
+        return None
+    raw = fields.get(col["colId"])
+    return resolve_attachment_or_url(raw, col["type"], IMAGES_DIR, slug, base_url, doc_id, api_key, "Image")
+
+
+def build_team_by_product(base_url: str, doc_id: str, api_key: str) -> dict:
+    """{produit_row_id: [{"nom": ..., "photo": ...}, ...]} à partir de la
+    table Equipes (Prenom, Nom, Photo, et la ReferenceList "Produits" qui
+    relie chaque agent aux fiches produits sur lesquelles il travaille)."""
+    columns = build_label_to_column(base_url, doc_id, "Equipes", api_key)
+    required = ["Prenom", "Nom", "Produits"]
+    missing = [label for label in required if label not in columns]
+    if missing:
+        print(f"Attention : colonnes introuvables dans la table Equipes (ignorées) : {missing}", file=sys.stderr)
+        return {}
+
+    records = fetch_json(f"{base_url}/api/docs/{doc_id}/tables/Equipes/records", api_key).get("records", [])
+
+    team_by_product: dict = {}
+    for r in records:
+        fields = r.get("fields", {})
+        prenom = clean_scalar(fields.get(columns["Prenom"]["colId"]), "Prenom")
+        nom_famille = clean_scalar(fields.get(columns["Nom"]["colId"]), "Nom")
+        full_name = " ".join(part for part in (prenom, nom_famille) if part)
+        if not full_name:
+            continue
+
+        photo = None
+        if "Photo" in columns:
+            raw_photo = fields.get(columns["Photo"]["colId"])
+            photo = resolve_attachment_or_url(
+                raw_photo, columns["Photo"]["type"], AGENTS_DIR, f"agent-{r['id']}", base_url, doc_id, api_key, "Photo"
+            )
+
+        raw_produits = fields.get(columns["Produits"]["colId"])
+        product_ids = raw_produits[1:] if isinstance(raw_produits, list) and raw_produits[:1] == ["L"] else []
+        for pid in product_ids:
+            team_by_product.setdefault(pid, []).append({"nom": full_name, "photo": photo})
+
+    return team_by_product
 
 
 def resolve_value(raw, col_type: str, label: str, base_url: str, doc_id: str, api_key: str, ref_cache: dict):
@@ -241,6 +288,8 @@ def main(out_path: str):
     records_data = fetch_json(f"{base_url}/api/docs/{doc_id}/tables/{table}/records", api_key)
     records = records_data.get("records", [])
 
+    team_by_product = build_team_by_product(base_url, doc_id, api_key)
+
     ref_cache: dict = {}
 
     def get(label, fields):
@@ -274,6 +323,7 @@ def main(out_path: str):
                 continue
             product[key] = offre if key == "offre" else get(label, fields)
         product["image"] = resolve_image(fields, label_to_column, slug, base_url, doc_id, api_key)
+        product["equipe"] = team_by_product.get(record["id"], [])
 
         products.append(product)
 

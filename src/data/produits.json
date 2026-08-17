@@ -16,7 +16,20 @@
     "contact": "adresse@data.gouv.fr",
     "raci": null,
     "budget": "https://pad.numerique.gouv.fr/rHMnemklQm6Sww5yVCI9ow#Base-Adresse-Nationale",
-    "equipe": "Frédérique Williams, Vincent Sagniez, Nicolas Kokla",
+    "equipe": [
+      {
+        "nom": "Frédérique Williams",
+        "photo": null
+      },
+      {
+        "nom": "Vincent Sagniez",
+        "photo": null
+      },
+      {
+        "nom": "Nicolas Kokla",
+        "photo": null
+      }
+    ],
     "derniereMiseAJour": "24-07-2026",
     "derniereMiseAJourPar": "nicolas.berthelot",
     "vision5ans": null,
@@ -41,7 +54,12 @@
     "contact": null,
     "raci": "https://ignf.sharepoint.com/:x:/r/sites/EXT-Mthodeproduit-Promo1/Documents%20partages/G%C3%A9n%C3%A9ral/1.%20Les%20produits%20accompagn%C3%A9s/Portail%20ENR/%5BMod%C3%A8le%20Equipe%5D%20RACI%20et%20Rituels%20Equipe%20Produit%20%E2%80%93%20Copie.xlsx?d=w2d933b61367c4a448bf204ac96ee9c69&csf=1&web=1&e=dTYGoT",
     "budget": null,
-    "equipe": "Jean Perret",
+    "equipe": [
+      {
+        "nom": "Jean Perret",
+        "photo": null
+      }
+    ],
     "derniereMiseAJour": "17-06-2026",
     "derniereMiseAJourPar": "nicolas.berthelot",
     "vision5ans": null,
@@ -66,7 +84,32 @@
     "contact": null,
     "raci": null,
     "budget": null,
-    "equipe": "Marie Gombert, Thierry Lallemant, Sofiane Kriat, Manon Taillebois, Elise-Rachel Mathis, Lucille Ricaud",
+    "equipe": [
+      {
+        "nom": "Marie Gombert",
+        "photo": null
+      },
+      {
+        "nom": "Thierry Lallemant",
+        "photo": null
+      },
+      {
+        "nom": "Sofiane Kriat",
+        "photo": null
+      },
+      {
+        "nom": "Manon Taillebois",
+        "photo": null
+      },
+      {
+        "nom": "Elise-Rachel Mathis",
+        "photo": null
+      },
+      {
+        "nom": "Lucille Ricaud",
+        "photo": null
+      }
+    ],
     "derniereMiseAJour": "17-06-2026",
     "derniereMiseAJourPar": "nicolas.berthelot",
     "vision5ans": null,
@@ -91,7 +134,16 @@
     "contact": null,
     "raci": null,
     "budget": null,
-    "equipe": "Pierre Touchent, Charles Velut",
+    "equipe": [
+      {
+        "nom": "Pierre Touchent",
+        "photo": null
+      },
+      {
+        "nom": "Charles Velut",
+        "photo": null
+      }
+    ],
     "derniereMiseAJour": "13-08-2026",
     "derniereMiseAJourPar": "nicolas.berthelot",
     "vision5ans": "- La référence géométrie s'appuie sur Galiléo​\n- La référence verticale nationale est soutenable et interopérable avec les références européennes et marines​\n- Les observations géodésiques du territoire sont partagées​\n- L'IGN est référent auprès des acteurs publics dans le domaine du risque et de la Défense",
@@ -116,7 +168,12 @@
     "contact": null,
     "raci": null,
     "budget": null,
-    "equipe": "Vincent Caillard",
+    "equipe": [
+      {
+        "nom": "Vincent Caillard",
+        "photo": null
+      }
+    ],
     "derniereMiseAJour": "13-08-2026",
     "derniereMiseAJourPar": "nicolas.berthelot",
     "vision5ans": "Production initialisée d’une SRPNG mondiale​\n\nIntégration de la SRPNG dans le segment sol PNEO NEXT​\n\nIntégration de la SRP dans le segment sol IRIS ​\n\nExploitation de la SRP dans la production GS​",
@@ -141,7 +198,12 @@
     "contact": null,
     "raci": null,
     "budget": null,
-    "equipe": "Régis Bellot",
+    "equipe": [
+      {
+        "nom": "Régis Bellot",
+        "photo": null
+      }
+    ],
     "derniereMiseAJour": "13-08-2026",
     "derniereMiseAJourPar": "nicolas.berthelot",
     "vision5ans": "Déployer la nouvelle BDOrtho vraie en remplacement de la BDOrtho & de l'Ortho Express actuelles en lien avec le remplacement de nos caméras​\n\nMutualiser en partie les programmes BD ORTHO, PCRS & LiDAR​\n\nDéployer l'offre à la demande ORTHO-SAT Pléiades Neo en complément de la BD ORTHO (augmentation de la fréquence d'observation selon les besoins)​\n\nAvoir défini le cadre de l'offre ORTHO-SAT CO3D en remplacement de l'ORTHO-SAT Pléiades​\n\nElargir l'offre  en données sources selon les cas d'usages confirmés​\n\nElargir l'offre en facilitant l'accès aux images orientées​",
@@ -166,7 +228,12 @@
     "contact": null,
     "raci": null,
     "budget": null,
-    "equipe": "Audrey Boulard",
+    "equipe": [
+      {
+        "nom": "Audrey Boulard",
+        "photo": null
+      }
+    ],
     "derniereMiseAJour": "13-08-2026",
     "derniereMiseAJourPar": "nicolas.berthelot",
     "vision5ans": "La primo acquisition du PCRS aura été réalisée.​\n Sa mise à jour s’appuiera sur des offres complémentaires non nécessairement exclusives, adaptées à des besoins différents : réfection totale en 5 cm, par patchs, et/ou par un PCRS 8 cm répondant a minima à la législation...  ​",
@@ -191,7 +258,7 @@
     "contact": null,
     "raci": null,
     "budget": null,
-    "equipe": null,
+    "equipe": [],
     "derniereMiseAJour": "13-08-2026",
     "derniereMiseAJourPar": "nicolas.berthelot",
     "vision5ans": null,
@@ -216,7 +283,12 @@
     "contact": null,
     "raci": null,
     "budget": null,
-    "equipe": "Sofiane Kriat",
+    "equipe": [
+      {
+        "nom": "Sofiane Kriat",
+        "photo": null
+      }
+    ],
     "derniereMiseAJour": "13-08-2026",
     "derniereMiseAJourPar": "nicolas.berthelot",
     "vision5ans": "Initialisation de France Relief en 2 ans + processus de MAJ en place ​\n\nLancer formellement France Relief à la fin officielle du programme LiDAR HD​\n\nMAJ des produits dérivés cartographiques à partir des données LiDAR HD ​\n\nMettre en place les interfaces de téléchargement et le bon parcours utilisateur sur Cartes.gouv ​",
@@ -241,7 +313,16 @@
     "contact": null,
     "raci": null,
     "budget": null,
-    "equipe": "Matthieu Le Masson, Stéphane Pelle",
+    "equipe": [
+      {
+        "nom": "Matthieu Le Masson",
+        "photo": null
+      },
+      {
+        "nom": "Stéphane Pelle",
+        "photo": null
+      }
+    ],
     "derniereMiseAJour": "13-08-2026",
     "derniereMiseAJourPar": "nicolas.berthelot",
     "vision5ans": "Coproduire annuellement les km² de \"socles\" de référence (orthos, MNx, etc.) prévus dans la directive de production actualisée​\n\nIntégrer de nouveaux capteurs (ex. CO3D) et préparer GS3​\n\nCoproduire et exploiter la SRP et la SRP NG (si actée)",
@@ -266,7 +347,12 @@
     "contact": null,
     "raci": null,
     "budget": null,
-    "equipe": "Thomas Sitbon",
+    "equipe": [
+      {
+        "nom": "Thomas Sitbon",
+        "photo": null
+      }
+    ],
     "derniereMiseAJour": "13-08-2026",
     "derniereMiseAJourPar": "nicolas.berthelot",
     "vision5ans": "Le point d'accès national de référence aux données d'observation de la Terre, articulé à la Géoplateforme et Geodes permettant de faciliter et maximiser l'usage auprès des utilisateurs​",
@@ -291,7 +377,16 @@
     "contact": "contact@panoramax.fr",
     "raci": null,
     "budget": null,
-    "equipe": "Christian Quest, Amélie Crépin",
+    "equipe": [
+      {
+        "nom": "Christian Quest",
+        "photo": null
+      },
+      {
+        "nom": "Amélie Crépin",
+        "photo": null
+      }
+    ],
     "derniereMiseAJour": "13-08-2026",
     "derniereMiseAJourPar": "nicolas.berthelot",
     "vision5ans": "La référence mondiale pour partager et utiliser librement des photos de terrain​\n\nUne gouvernance transférée à la fondation Panoramax​",

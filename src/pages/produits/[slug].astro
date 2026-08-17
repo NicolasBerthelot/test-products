@@ -34,6 +34,16 @@ const contentSections = [
 function isUrl(v: string) {
   return /^https?:\/\//i.test(v.trim());
 }
+
+function initials(nom: string) {
+  return nom
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
 ---
 <Base title={p.nom} description={p.promesse || p.propositionValeur}>
   <div class="fr-container fr-mt-3w">
@@ -127,10 +137,25 @@ function isUrl(v: string) {
                 </>
               )}
 
-              {p.equipe && (
+              {p.equipe && p.equipe.length > 0 && (
                 <>
                   <h2 class="fr-h6 fr-mt-4w fr-mb-1w">Équipe</h2>
-                  <p class="fr-text--sm">{p.equipe}</p>
+                  <ul class="ign-team-list">
+                    {p.equipe.map((membre) => (
+                      <li class="ign-team-member">
+                        {membre.photo ? (
+                          <img
+                            class="ign-avatar"
+                            src={membre.photo.startsWith("http") ? membre.photo : `${import.meta.env.BASE_URL}${membre.photo}`}
+                            alt=""
+                          />
+                        ) : (
+                          <span class="ign-avatar ign-avatar--placeholder" aria-hidden="true">{initials(membre.nom)}</span>
+                        )}
+                        <span class="fr-text--sm">{membre.nom}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </>
               )}
 

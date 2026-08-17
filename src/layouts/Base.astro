@@ -95,6 +95,35 @@ const DSFR_VERSION = "1.15.2";
       object-fit: cover;
       border-radius: 0.25rem;
     }
+    .ign-team-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+    }
+    .ign-team-member {
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+    }
+    .ign-avatar {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .ign-avatar--placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--background-contrast-grey);
+      color: var(--text-mention-grey, #666);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>

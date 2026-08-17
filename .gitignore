@@ -5,3 +5,4 @@ dist/
 .claude/settings.local.json
 __pycache__/
 public/images/
+public/agents/

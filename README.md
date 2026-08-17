@@ -73,6 +73,17 @@ ignorée si absente) :
   `.gitignore`). Une image direct-URL n'a pas cette dépendance et reste
   visible même sans relancer le script de synchronisation.
 
+### Photos des membres de l'équipe
+
+La table Grist `Equipes` (colonnes `Prenom`, `Nom`, la `ReferenceList`
+`Produits` qui relie chaque agent à ses fiches produits) peut avoir une
+colonne **"Photo"** facultative, au même principe que "Image" ci-dessus :
+URL texte directe, ou pièce jointe Grist téléchargée au build et
+re-hébergée dans `public/agents/agent-{id}.ext` (généré, pas commité).
+Sans photo, une vignette ronde avec les initiales de l'agent est affichée
+à la place. Dans les deux cas, aucune photo n'est jamais stockée dans le
+dépôt Git — tout est retéléchargé depuis Grist à chaque run CI.
+
 ### Solution de secours : régénérer depuis un export CSV
 
 Si l'API Grist est indisponible, `scripts/csv_to_json.py` reproduit la même
