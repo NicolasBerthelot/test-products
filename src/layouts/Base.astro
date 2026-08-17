@@ -5,6 +5,18 @@ interface Props {
 }
 const { title, description = "Catalogue interne des produits numériques portés par les équipes de l'IGN" } = Astro.props;
 const DSFR_VERSION = "1.15.2";
+// dsfr.min.css ne définit pas de classe générique .fr-icon-mail-line (seule
+// une poignée d'icônes utilisées par les composants DSFR eux-mêmes sont
+// incluses) : on référence directement le SVG de la même façon que le fait
+// .fr-btn--mail dans dsfr.min.css.
+// `url(var(--x))` n'est pas supporté par les navigateurs (le token url()
+// est consommé avant la substitution de la variable) : on stocke donc la
+// fonction url() complète dans la variable CSS elle-même.
+const mailIconUrl = `url("https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@${DSFR_VERSION}/dist/icons/business/mail-line.svg")`;
+// Pas d'icône Teams/discussion dans le set DSFR (le CDN ne sert que les 61
+// SVG effectivement utilisés par ses propres composants, pas tout Remix
+// Icon) : icône "bulle de discussion" générique, auto-hébergée.
+const chatIconUrl = `url("${import.meta.env.BASE_URL}icons/chat-line.svg")`;
 ---
 <!doctype html>
 <html lang="fr" data-fr-scheme="system">
@@ -15,7 +27,7 @@ const DSFR_VERSION = "1.15.2";
   <title>{title} · Produits IGN</title>
   <link rel="stylesheet" href={`https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@${DSFR_VERSION}/dist/dsfr.min.css`} />
   <link rel="icon" href={`https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@${DSFR_VERSION}/dist/favicon/favicon.svg`} type="image/svg+xml" />
-  <style is:global>
+  <style is:global define:vars={{ mailIconUrl, chatIconUrl }}>
     :root {
       --ign-vert: #00524C;
       --ign-vert-clair: #1E7A6F;
@@ -95,6 +107,20 @@ const DSFR_VERSION = "1.15.2";
       object-fit: cover;
       border-radius: 0.25rem;
     }
+    .ign-markdown :is(h3, h4, h5, h6) {
+      margin-top: 1.5rem;
+    }
+    .ign-markdown p {
+      margin: 0 0 1rem;
+    }
+    .ign-markdown ul,
+    .ign-markdown ol {
+      padding-left: 1.5rem;
+      margin: 0 0 1rem;
+    }
+    .ign-markdown a {
+      color: var(--ign-vert);
+    }
     .ign-team-section {
       border-top: 1px solid var(--border-default-grey);
     }
@@ -117,6 +143,43 @@ const DSFR_VERSION = "1.15.2";
     .ign-team-name {
       font-weight: 700;
       margin: 0;
+    }
+    .ign-team-actions {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0.25rem 0 0;
+    }
+    .ign-team-icon {
+      display: inline-flex;
+      color: var(--text-mention-grey, #666);
+      background-image: none;
+    }
+    .ign-team-icon:hover {
+      color: var(--ign-vert);
+    }
+    .ign-team-icon::before {
+      content: "";
+      display: inline-block;
+      width: 1rem;
+      height: 1rem;
+      background-color: currentColor;
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+    }
+    .ign-team-mail::before {
+      -webkit-mask-image: var(--mailIconUrl);
+      mask-image: var(--mailIconUrl);
+    }
+    .ign-team-teams::before {
+      -webkit-mask-image: var(--chatIconUrl);
+      mask-image: var(--chatIconUrl);
+    }
+    /* dsfr.min.css ajoute automatiquement une flèche "lien externe" à tout
+       [target=_blank] : pas utile ici, le picto suffit. */
+    .ign-team-icon.ign-team-teams::after {
+      content: none;
     }
     .ign-team-role {
       font-size: 0.8125rem;

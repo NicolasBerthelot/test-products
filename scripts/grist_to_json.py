@@ -200,9 +200,10 @@ def resolve_image(fields: dict, label_to_column: dict, slug: str, base_url: str,
 
 
 def build_team_by_product(base_url: str, doc_id: str, api_key: str) -> dict:
-    """{produit_row_id: [{"nom": ..., "photo": ...}, ...]} à partir de la
-    table Equipes (Prenom, Nom, Photo, et la ReferenceList "Produits" qui
-    relie chaque agent aux fiches produits sur lesquelles il travaille).
+    """{produit_row_id: [{"nom": ..., "photo": ..., "mail": ...}, ...]} à
+    partir de la table Equipes (Prenom, Nom, Photo, Mail, et la
+    ReferenceList "Produits" qui relie chaque agent aux fiches produits sur
+    lesquelles il travaille).
 
     On identifie les colonnes par colId (Prenom, Nom, Photo, Produits) et
     non par libellé affiché : contrairement à la table Produits (dont les
@@ -219,6 +220,11 @@ def build_team_by_product(base_url: str, doc_id: str, api_key: str) -> dict:
         return {}
 
     records = fetch_json(f"{base_url}/api/docs/{doc_id}/tables/Equipes/records", api_key).get("records", [])
+
+    # colId de la colonne mail : cherché par correspondance insensible à la
+    # casse ("Mail", "mail", "Email"...) plutôt qu'en dur, le colId exact
+    # dépendant du libellé tapé dans Grist au moment de la création.
+    mail_col = next((cid for cid in col_types if cid.lower() in ("mail", "email", "courriel")), None)
 
     team_by_product: dict = {}
     for r in records:
@@ -237,12 +243,13 @@ def build_team_by_product(base_url: str, doc_id: str, api_key: str) -> dict:
 
         fonction = clean_scalar(fields.get("Fonction"), "Fonction") if "Fonction" in col_types else None
         service = clean_scalar(fields.get("Service"), "Service") if "Service" in col_types else None
+        mail = clean_scalar(fields.get(mail_col), mail_col) if mail_col else None
 
         raw_produits = fields.get("Produits")
         product_ids = raw_produits[1:] if isinstance(raw_produits, list) and raw_produits[:1] == ["L"] else []
         for pid in product_ids:
             team_by_product.setdefault(pid, []).append(
-                {"nom": full_name, "photo": photo, "fonction": fonction, "service": service}
+                {"nom": full_name, "photo": photo, "fonction": fonction, "service": service, "mail": mail}
             )
 
     return team_by_product

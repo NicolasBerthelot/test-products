@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import produits from "../../data/produits.json";
+import { renderMarkdown } from "../../lib/markdown";
 
 export function getStaticPaths() {
   return produits.map((p) => ({
@@ -102,7 +103,7 @@ function serviceColor(service: string) {
         {contentSections.map((s) => (
           <section class="fr-mb-4w" id={s.key}>
             <h2 class="fr-h4">{s.label}</h2>
-            <p style="white-space: pre-line;">{s.value}</p>
+            <div class="ign-markdown" set:html={renderMarkdown(s.value)} />
           </section>
         ))}
         {contentSections.length === 0 && (
@@ -169,6 +170,24 @@ function serviceColor(service: string) {
                   alt=""
                 />
                 <p class="ign-team-name">{membre.nom}</p>
+                {membre.mail && (
+                  <p class="ign-team-actions">
+                    <a
+                      class="ign-team-icon ign-team-mail"
+                      href={`mailto:${membre.mail}`}
+                      title={`Envoyer un mail à ${membre.nom}`}
+                      aria-label={`Envoyer un mail à ${membre.nom}`}
+                    ></a>
+                    <a
+                      class="ign-team-icon ign-team-teams"
+                      href={`https://teams.microsoft.com/l/chat/0/0?users=${encodeURIComponent(membre.mail)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title={`Discuter avec ${membre.nom} sur Teams`}
+                      aria-label={`Discuter avec ${membre.nom} sur Teams`}
+                    ></a>
+                  </p>
+                )}
                 {membre.fonction && <p class="ign-team-role">{membre.fonction}</p>}
                 {membre.service && (
                   <span class="ign-service-tag" style={`background-color: ${serviceColor(membre.service)};`}>

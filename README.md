@@ -90,6 +90,13 @@ produits) alimente la section "Équipe" en bas de chaque fiche produit :
   (`serviceColor` dans `[slug].astro`) : une même direction a toujours la
   même couleur, et toute nouvelle direction en obtient une automatiquement,
   sans modification de code.
+- **`Mail`** (facultative) : affiche deux pictos à côté du nom de l'agent —
+  une enveloppe qui ouvre un `mailto:` vers son adresse, et une bulle de
+  discussion qui ouvre une conversation Teams via un lien
+  `https://teams.microsoft.com/l/chat/0/0?users=<mail>`. Le colId de la
+  colonne est recherché sans tenir compte de la casse (`Mail`, `mail`,
+  `Email`, `Courriel`) pour ne pas dépendre du libellé exact tapé dans
+  Grist.
 
 ### Solution de secours : régénérer depuis un export CSV
 
