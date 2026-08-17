@@ -1,7 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
 import produits from "../../data/produits.json";
-import { renderMarkdown } from "../../lib/markdown";
 
 export function getStaticPaths() {
   return produits.map((p) => ({
@@ -103,7 +102,7 @@ function serviceColor(service: string) {
         {contentSections.map((s) => (
           <section class="fr-mb-4w" id={s.key}>
             <h2 class="fr-h4">{s.label}</h2>
-            <div class="ign-markdown" set:html={renderMarkdown(s.value)} />
+            <p style="white-space: pre-line;">{s.value}</p>
           </section>
         ))}
         {contentSections.length === 0 && (
