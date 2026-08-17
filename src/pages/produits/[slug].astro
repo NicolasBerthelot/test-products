@@ -36,6 +36,19 @@ function isUrl(v: string) {
 }
 
 const defaultAvatar = `${import.meta.env.BASE_URL}agent.png`;
+
+// Couleur de tag déterministe par direction (préfixe avant "/", ex. "DP"
+// dans "DP/SPP" ; "Prestataire" n'a pas de "/" et forme sa propre direction).
+// Hash simple -> palette fixe : toute nouvelle direction obtient une couleur
+// automatiquement, toujours la même, sans avoir à coder chaque code en dur.
+const TAG_PALETTE = ["#0063CB", "#6E445A", "#00694E", "#8D533E", "#417DC4", "#A558A0", "#6A6156", "#C36F31"];
+
+function serviceColor(service: string) {
+  const direction = service.split("/")[0].trim();
+  let hash = 0;
+  for (const char of direction) hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
+  return TAG_PALETTE[hash % TAG_PALETTE.length];
+}
 ---
 <Base title={p.nom} description={p.promesse || p.propositionValeur}>
   <div class="fr-container fr-mt-3w">
@@ -157,6 +170,11 @@ const defaultAvatar = `${import.meta.env.BASE_URL}agent.png`;
                 />
                 <p class="ign-team-name">{membre.nom}</p>
                 {membre.fonction && <p class="ign-team-role">{membre.fonction}</p>}
+                {membre.service && (
+                  <span class="ign-service-tag" style={`background-color: ${serviceColor(membre.service)};`}>
+                    {membre.service}
+                  </span>
+                )}
               </div>
             </div>
           ))}

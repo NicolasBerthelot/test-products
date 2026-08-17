@@ -73,17 +73,23 @@ ignorée si absente) :
   `.gitignore`). Une image direct-URL n'a pas cette dépendance et reste
   visible même sans relancer le script de synchronisation.
 
-### Équipe : photos et rôles des agents
+### Équipe : photos, rôles et services des agents
 
-La table Grist `Equipes` (colonnes `Prenom`, `Nom`, `Fonction`, et la
-`ReferenceList` `Produits` qui relie chaque agent à ses fiches produits)
-alimente la section "Équipe" en bas de chaque fiche produit :
+La table Grist `Equipes` (colonnes `Prenom`, `Nom`, `Fonction`, `Service`,
+et la `ReferenceList` `Produits` qui relie chaque agent à ses fiches
+produits) alimente la section "Équipe" en bas de chaque fiche produit :
 
 - **`Photo`** (facultative) : URL texte directe, ou pièce jointe Grist
   téléchargée au build et re-hébergée dans `public/agents/agent-{id}.ext`
   (généré, pas commité — comme `public/images/`). Sans photo, l'image par
   défaut `public/agent.png` (commitée, celle-ci) est utilisée à la place.
 - **`Fonction`** (facultative) : affichée sous le nom de l'agent.
+- **`Service`** (facultative, ex. `"DP/SPP"`, `"Prestataire"`) : affichée
+  sous forme de tag coloré. La couleur est dérivée du préfixe avant le
+  `/` (la "direction") par une fonction de hash vers une palette fixe
+  (`serviceColor` dans `[slug].astro`) : une même direction a toujours la
+  même couleur, et toute nouvelle direction en obtient une automatiquement,
+  sans modification de code.
 
 ### Solution de secours : régénérer depuis un export CSV
 
