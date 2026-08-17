@@ -202,10 +202,18 @@ def resolve_image(fields: dict, label_to_column: dict, slug: str, base_url: str,
 def build_team_by_product(base_url: str, doc_id: str, api_key: str) -> dict:
     """{produit_row_id: [{"nom": ..., "photo": ...}, ...]} à partir de la
     table Equipes (Prenom, Nom, Photo, et la ReferenceList "Produits" qui
-    relie chaque agent aux fiches produits sur lesquelles il travaille)."""
-    columns = build_label_to_column(base_url, doc_id, "Equipes", api_key)
+    relie chaque agent aux fiches produits sur lesquelles il travaille).
+
+    On identifie les colonnes par colId (Prenom, Nom, Photo, Produits) et
+    non par libellé affiché : contrairement à la table Produits (dont les
+    libellés humains sont fixés par la spec), cette table est la nôtre et
+    son libellé affiché peut différer du colId (ex. "Prénom" accentué pour
+    un colId "Prenom", qui ne peut pas contenir d'accent) — matcher sur le
+    colId, stable, évite de dépendre de ce libellé.
+    """
+    col_types = {col["id"]: (col.get("fields", {}) or {}).get("type", "Text") for col in fetch_columns(base_url, doc_id, "Equipes", api_key)}
     required = ["Prenom", "Nom", "Produits"]
-    missing = [label for label in required if label not in columns]
+    missing = [col_id for col_id in required if col_id not in col_types]
     if missing:
         print(f"Attention : colonnes introuvables dans la table Equipes (ignorées) : {missing}", file=sys.stderr)
         return {}
@@ -215,20 +223,19 @@ def build_team_by_product(base_url: str, doc_id: str, api_key: str) -> dict:
     team_by_product: dict = {}
     for r in records:
         fields = r.get("fields", {})
-        prenom = clean_scalar(fields.get(columns["Prenom"]["colId"]), "Prenom")
-        nom_famille = clean_scalar(fields.get(columns["Nom"]["colId"]), "Nom")
+        prenom = clean_scalar(fields.get("Prenom"), "Prenom")
+        nom_famille = clean_scalar(fields.get("Nom"), "Nom")
         full_name = " ".join(part for part in (prenom, nom_famille) if part)
         if not full_name:
             continue
 
         photo = None
-        if "Photo" in columns:
-            raw_photo = fields.get(columns["Photo"]["colId"])
+        if "Photo" in col_types:
             photo = resolve_attachment_or_url(
-                raw_photo, columns["Photo"]["type"], AGENTS_DIR, f"agent-{r['id']}", base_url, doc_id, api_key, "Photo"
+                fields.get("Photo"), col_types["Photo"], AGENTS_DIR, f"agent-{r['id']}", base_url, doc_id, api_key, "Photo"
             )
 
-        raw_produits = fields.get(columns["Produits"]["colId"])
+        raw_produits = fields.get("Produits")
         product_ids = raw_produits[1:] if isinstance(raw_produits, list) and raw_produits[:1] == ["L"] else []
         for pid in product_ids:
             team_by_product.setdefault(pid, []).append({"nom": full_name, "photo": photo})
