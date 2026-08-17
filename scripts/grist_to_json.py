@@ -235,10 +235,12 @@ def build_team_by_product(base_url: str, doc_id: str, api_key: str) -> dict:
                 fields.get("Photo"), col_types["Photo"], AGENTS_DIR, f"agent-{r['id']}", base_url, doc_id, api_key, "Photo"
             )
 
+        fonction = clean_scalar(fields.get("Fonction"), "Fonction") if "Fonction" in col_types else None
+
         raw_produits = fields.get("Produits")
         product_ids = raw_produits[1:] if isinstance(raw_produits, list) and raw_produits[:1] == ["L"] else []
         for pid in product_ids:
-            team_by_product.setdefault(pid, []).append({"nom": full_name, "photo": photo})
+            team_by_product.setdefault(pid, []).append({"nom": full_name, "photo": photo, "fonction": fonction})
 
     return team_by_product
 

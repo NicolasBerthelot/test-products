@@ -35,15 +35,7 @@ function isUrl(v: string) {
   return /^https?:\/\//i.test(v.trim());
 }
 
-function initials(nom: string) {
-  return nom
-    .split(/\s+/)
-    .filter(Boolean)
-    .map((part) => part[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-}
+const defaultAvatar = `${import.meta.env.BASE_URL}agent.png`;
 ---
 <Base title={p.nom} description={p.promesse || p.propositionValeur}>
   <div class="fr-container fr-mt-3w">
@@ -137,28 +129,6 @@ function initials(nom: string) {
                 </>
               )}
 
-              {p.equipe && p.equipe.length > 0 && (
-                <>
-                  <h2 class="fr-h6 fr-mt-4w fr-mb-1w">Équipe</h2>
-                  <ul class="ign-team-list">
-                    {p.equipe.map((membre) => (
-                      <li class="ign-team-member">
-                        {membre.photo ? (
-                          <img
-                            class="ign-avatar"
-                            src={membre.photo.startsWith("http") ? membre.photo : `${import.meta.env.BASE_URL}${membre.photo}`}
-                            alt=""
-                          />
-                        ) : (
-                          <span class="ign-avatar ign-avatar--placeholder" aria-hidden="true">{initials(membre.nom)}</span>
-                        )}
-                        <span class="fr-text--sm">{membre.nom}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              )}
-
               {p.derniereMiseAJour && (
                 <p class="ign-updated fr-mt-4w">
                   Dernière mise à jour le {p.derniereMiseAJour.trim()}
@@ -170,8 +140,33 @@ function initials(nom: string) {
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="fr-mt-4w">
+  {p.equipe && p.equipe.length > 0 && (
+    <section class="ign-team-section">
+      <div class="fr-container fr-py-6w">
+        <h2 class="fr-h4 fr-mb-3w">Équipe</h2>
+        <div class="fr-grid-row fr-grid-row--gutters">
+          {p.equipe.map((membre) => (
+            <div class="fr-col-6 fr-col-sm-4 fr-col-md-3 fr-col-lg-2">
+              <div class="ign-team-card">
+                <img
+                  class="ign-avatar-lg"
+                  src={membre.photo ? (membre.photo.startsWith("http") ? membre.photo : `${import.meta.env.BASE_URL}${membre.photo}`) : defaultAvatar}
+                  alt=""
+                />
+                <p class="ign-team-name">{membre.nom}</p>
+                {membre.fonction && <p class="ign-team-role">{membre.fonction}</p>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <div class="fr-container">
+    <div class="fr-mb-4w">
       <a class="fr-link fr-icon-arrow-left-line fr-link--icon-left" href={import.meta.env.BASE_URL}>Retour au catalogue</a>
     </div>
   </div>

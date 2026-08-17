@@ -95,34 +95,28 @@ const DSFR_VERSION = "1.15.2";
       object-fit: cover;
       border-radius: 0.25rem;
     }
-    .ign-team-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 0.625rem;
+    .ign-team-section {
+      border-top: 1px solid var(--border-default-grey);
     }
-    .ign-team-member {
-      display: flex;
-      align-items: center;
-      gap: 0.625rem;
+    .ign-team-card {
+      text-align: center;
     }
-    .ign-avatar {
-      width: 2.5rem;
-      height: 2.5rem;
+    .ign-avatar-lg {
+      width: 5.5rem;
+      height: 5.5rem;
       border-radius: 50%;
       object-fit: cover;
-      flex-shrink: 0;
+      display: block;
+      margin: 0 auto 0.75rem;
     }
-    .ign-avatar--placeholder {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--background-contrast-grey);
-      color: var(--text-mention-grey, #666);
-      font-size: 0.75rem;
+    .ign-team-name {
       font-weight: 700;
+      margin: 0;
+    }
+    .ign-team-role {
+      font-size: 0.8125rem;
+      color: var(--text-mention-grey, #666);
+      margin: 0.125rem 0 0;
     }
   </style>
 </head>
