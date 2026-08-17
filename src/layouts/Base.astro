@@ -3,7 +3,7 @@ interface Props {
   title: string;
   description?: string;
 }
-const { title, description = "Catalogue des produits numériques de l'IGN" } = Astro.props;
+const { title, description = "Catalogue interne des produits numériques portés par les équipes de l'IGN" } = Astro.props;
 const DSFR_VERSION = "1.15.2";
 ---
 <!doctype html>
@@ -151,7 +151,7 @@ const DSFR_VERSION = "1.15.2";
               <a href={import.meta.env.BASE_URL} title="Accueil - Produits IGN">
                 <p class="fr-header__service-title">Produits IGN</p>
               </a>
-              <p class="fr-header__service-tagline">Catalogue des produits numériques de l'Institut national de l'information géographique et forestière</p>
+              <p class="fr-header__service-tagline">Catalogue des produits numériques portés par les équipes de l'IGN</p>
             </div>
           </div>
         </div>
@@ -171,7 +171,7 @@ const DSFR_VERSION = "1.15.2";
         </div>
         <div class="fr-footer__content">
           <p class="fr-footer__content-desc">
-            Ce catalogue recense les produits numériques développés et opérés par l'IGN, à destination des agents publics, partenaires et citoyens.
+            Ce catalogue valorise les produits numériques conçus et opérés par les équipes de l'IGN, à destination des agents de l'institut.
           </p>
         </div>
       </div>

@@ -15,13 +15,13 @@ function searchIndex(p: (typeof produits)[number]) {
   return normalize([p.nom, p.promesse, ...noms].filter(Boolean).join(" "));
 }
 ---
-<Base title="Accueil" description="Découvrez les produits numériques développés par l'IGN : référentiels, observation du territoire et services associés.">
+<Base title="Accueil" description="Les produits numériques portés par les équipes de l'IGN : référentiels, observation du territoire et services associés.">
   <section class="ign-hero">
     <div class="fr-container">
-      <p class="fr-badge fr-badge--yellow-tournesol fr-mb-2w">Catalogue produits</p>
-      <h1 class="fr-mb-2w">Les produits numériques de l'IGN</h1>
+      <p class="fr-badge fr-badge--yellow-tournesol fr-mb-2w">Équipes produit</p>
+      <h1 class="fr-mb-2w">Les produits numériques portés par les équipes produit de l'IGN</h1>
       <p class="fr-text--lead" style="max-width: 46rem;">
-        Référentiels géographiques, observation du territoire, données ouvertes : découvrez les {produits.length} produits que l'IGN conçoit et opère pour les acteurs publics, les entreprises et les citoyens.
+        Référentiels géographiques, observation du territoire, données ouvertes : découvrez les {produits.length} produits que conçoivent et opèrent les équipes de l'IGN — pour savoir qui fait quoi, et qui contacter.
       </p>
     </div>
   </section>
