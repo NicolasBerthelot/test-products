@@ -28,36 +28,49 @@ function searchIndex(p: (typeof produits)[number]) {
 
   <div class="ign-filters">
     <div class="fr-container">
-      <div class="fr-search-bar fr-mb-2w" role="search">
-        <label class="fr-label" for="product-search">Rechercher un produit</label>
-        <input
-          class="fr-input"
-          placeholder="Nom, promesse, équipe..."
-          type="search"
-          id="product-search"
-          name="product-search"
-        />
-        <button class="fr-btn" title="Rechercher" type="button">Rechercher</button>
-      </div>
+      <button
+        type="button"
+        class="ign-filters-toggle"
+        id="filters-toggle"
+        aria-expanded="false"
+        aria-controls="filters-panel"
+      >
+        <span>Filtrer les produits</span>
+        <span class="ign-filters-toggle-value" id="filters-toggle-value">Toutes les offres</span>
+      </button>
 
-      <p class="fr-text--sm fr-mb-1w" style="font-weight: 700;">Filtrer par offre</p>
-      <ul class="fr-tags-group" id="offre-filters">
-        <li>
-          <button class="fr-tag ign-chip" data-offre="all" aria-pressed="true">
-            Toutes les offres ({produits.length})
-          </button>
-        </li>
-        {offres.map((offre) => {
-          const count = produits.filter((p) => p.offre === offre).length;
-          return (
-            <li>
-              <button class="fr-tag ign-chip" data-offre={offre} aria-pressed="false">
-                {offre} ({count})
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+      <div class="ign-filters-panel" id="filters-panel">
+        <div class="fr-search-bar fr-mb-2w" role="search">
+          <label class="fr-label" for="product-search">Rechercher un produit</label>
+          <input
+            class="fr-input"
+            placeholder="Nom, promesse, équipe..."
+            type="search"
+            id="product-search"
+            name="product-search"
+          />
+          <button class="fr-btn" title="Rechercher" type="button">Rechercher</button>
+        </div>
+
+        <p class="fr-text--sm fr-mb-1w" style="font-weight: 700;">Filtrer par offre</p>
+        <ul class="fr-tags-group" id="offre-filters">
+          <li>
+            <button class="fr-tag ign-chip" data-offre="all" aria-pressed="true">
+              Toutes les offres ({produits.length})
+            </button>
+          </li>
+          {offres.map((offre) => {
+            const count = produits.filter((p) => p.offre === offre).length;
+            return (
+              <li>
+                <button class="fr-tag ign-chip" data-offre={offre} aria-pressed="false">
+                  {offre} ({count})
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   </div>
 
@@ -106,6 +119,9 @@ function searchIndex(p: (typeof produits)[number]) {
     const items = document.querySelectorAll<HTMLElement>(".product-item");
     const emptyState = document.getElementById("empty-state");
     const searchInput = document.querySelector<HTMLInputElement>("#product-search");
+    const filtersToggle = document.getElementById("filters-toggle");
+    const filtersPanel = document.getElementById("filters-panel");
+    const filtersToggleValue = document.getElementById("filters-toggle-value");
 
     let activeOffre = "all";
 
@@ -127,10 +143,17 @@ function searchIndex(p: (typeof produits)[number]) {
         buttons.forEach((b) => b.setAttribute("aria-pressed", "false"));
         btn.setAttribute("aria-pressed", "true");
         activeOffre = btn.dataset.offre ?? "all";
+        if (filtersToggleValue) filtersToggleValue.textContent = btn.textContent?.trim() ?? "";
         applyFilters();
       });
     });
 
     searchInput?.addEventListener("input", applyFilters);
+
+    filtersToggle?.addEventListener("click", () => {
+      const expanded = filtersToggle.getAttribute("aria-expanded") === "true";
+      filtersToggle.setAttribute("aria-expanded", String(!expanded));
+      filtersPanel?.classList.toggle("ign-filters-panel--open", !expanded);
+    });
   </script>
 </Base>

@@ -69,6 +69,51 @@ const chatIconUrl = `url("${import.meta.env.BASE_URL}icons/chat-line.svg")`;
     .ign-chip {
       cursor: pointer;
     }
+    .ign-filters-toggle {
+      display: none;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      background: none;
+      border: none;
+      font-weight: 700;
+      color: var(--ign-vert);
+      cursor: pointer;
+    }
+    .ign-filters-toggle::after {
+      content: "";
+      flex: 0 0 auto;
+      width: 0.5rem;
+      height: 0.5rem;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: rotate(45deg);
+      transition: transform 0.15s ease;
+    }
+    .ign-filters-toggle[aria-expanded="true"]::after {
+      transform: rotate(-135deg);
+    }
+    .ign-filters-toggle-value {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 400;
+      color: var(--text-mention-grey, #666);
+    }
+    @media (max-width: 48em) {
+      .ign-filters-toggle {
+        display: flex;
+      }
+      .ign-filters-panel {
+        display: none;
+        padding-top: 0.5rem;
+      }
+      .ign-filters-panel.ign-filters-panel--open {
+        display: block;
+      }
+    }
     .ign-product-card {
       height: 100%;
       transition: transform 0.15s ease, box-shadow 0.15s ease;
