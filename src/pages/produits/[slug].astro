@@ -72,21 +72,24 @@ function serviceColor(service: string) {
 
   <section class="ign-hero">
     <div class="fr-container">
-      {p.offre && <p class="fr-badge fr-badge--yellow-tournesol fr-mb-2w">{p.offre}</p>}
-      <h1 class="fr-mb-2w">{p.nom}</h1>
-      {p.promesse && <p class="fr-text--lead" style="max-width: 46rem;">{p.promesse}</p>}
+      <div class="fr-grid-row fr-grid-row--gutters fr-grid-row--middle">
+        <div class={p.image ? "fr-col-12 fr-col-lg-6" : "fr-col-12"}>
+          {p.offre && <p class="fr-badge fr-badge--yellow-tournesol fr-mb-2w">{p.offre}</p>}
+          <h1 class="fr-mb-2w">{p.nom}</h1>
+          {p.promesse && <p class="fr-text--lead">{p.promesse}</p>}
+        </div>
+        {p.image && (
+          <div class="fr-col-12 fr-col-lg-5 fr-pl-lg-4w">
+            <img
+              class="fr-responsive-img fr-ratio-16x9 ign-product-image"
+              src={p.image.startsWith("http") ? p.image : `${import.meta.env.BASE_URL}${p.image}`}
+              alt={`Illustration : ${p.nom}`}
+            />
+          </div>
+        )}
+      </div>
     </div>
   </section>
-
-  {p.image && (
-    <div class="fr-container fr-mt-1w">
-      <img
-        class="fr-responsive-img ign-product-image"
-        src={p.image.startsWith("http") ? p.image : `${import.meta.env.BASE_URL}${p.image}`}
-        alt={`Illustration : ${p.nom}`}
-      />
-    </div>
-  )}
 
   <div class="fr-container fr-py-6w">
     <div class="fr-grid-row fr-grid-row--gutters">
