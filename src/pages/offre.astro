@@ -1,0 +1,24 @@
+---
+import Base from "../layouts/Base.astro";
+import { renderMarkdown } from "../lib/markdown";
+import offreMd from "../data/offre.md?raw";
+
+const bodyHtml = renderMarkdown(offreMd.replaceAll("{{BASE}}", import.meta.env.BASE_URL));
+---
+<Base title="Offre" description="Les six grandes familles de produits et services numériques de l'IGN, et les orientations stratégiques qui les structurent.">
+  <section class="ign-hero">
+    <div class="fr-container">
+      <p class="fr-badge fr-badge--yellow-tournesol fr-mb-2w">Positionnement</p>
+      <h1 class="fr-mb-2w">L'Offre IGN</h1>
+      <p class="fr-text--lead" style="max-width: 46rem;">
+        Comment l'institut organise ses produits et services numériques autour de six grandes familles, au service des politiques publiques et des acteurs territoriaux.
+      </p>
+    </div>
+  </section>
+
+  <section class="fr-container fr-py-6w">
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div class="fr-col-12 fr-col-md-10 fr-col-lg-8 ign-markdown" set:html={bodyHtml} />
+    </div>
+  </section>
+</Base>

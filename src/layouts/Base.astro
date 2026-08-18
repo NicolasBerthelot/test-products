@@ -5,6 +5,13 @@ interface Props {
 }
 const { title, description = "Catalogue interne des produits numériques portés par les équipes de l'IGN" } = Astro.props;
 const DSFR_VERSION = "1.15.2";
+
+const homeHref = import.meta.env.BASE_URL;
+const offreHref = `${import.meta.env.BASE_URL}offre/`;
+const currentPath = Astro.url.pathname;
+function isActive(href: string) {
+  return currentPath === href || (href !== homeHref && currentPath.startsWith(href));
+}
 // dsfr.min.css ne définit pas de classe générique .fr-icon-mail-line (seule
 // une poignée d'icônes utilisées par les composants DSFR eux-mêmes sont
 // incluses) : on référence directement le SVG de la même façon que le fait
@@ -121,6 +128,13 @@ const chatIconUrl = `url("${import.meta.env.BASE_URL}icons/chat-line.svg")`;
     .ign-markdown a {
       color: var(--ign-vert);
     }
+    .ign-markdown img {
+      display: block;
+      width: 100%;
+      max-width: 640px;
+      margin: 0.5rem auto 1.5rem;
+      border-radius: 0.25rem;
+    }
     .ign-team-section {
       border-top: 1px solid var(--border-default-grey);
     }
@@ -209,6 +223,9 @@ const chatIconUrl = `url("${import.meta.env.BASE_URL}icons/chat-line.svg")`;
                   République<br />Française
                 </p>
               </div>
+              <div class="fr-header__navbar">
+                <button class="fr-btn--menu fr-btn" data-fr-opened="false" aria-controls="ign-header-modal" aria-haspopup="menu" id="ign-header-menu-button" title="Menu">Menu</button>
+              </div>
             </div>
             <div class="fr-header__service">
               <a href={import.meta.env.BASE_URL} title="Accueil - Produits IGN">
@@ -218,6 +235,25 @@ const chatIconUrl = `url("${import.meta.env.BASE_URL}icons/chat-line.svg")`;
             </div>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="fr-header__menu fr-modal" id="ign-header-modal" aria-labelledby="ign-header-menu-button">
+      <div class="fr-container">
+        <button class="fr-btn--close fr-btn" aria-controls="ign-header-modal" title="Fermer">Fermer</button>
+        <div class="fr-header__menu-links"></div>
+        <nav class="fr-nav" id="ign-header-navigation" role="navigation" aria-label="Menu principal">
+          <ul class="fr-nav__list">
+            <li class="fr-nav__item">
+              <a class="fr-nav__link" href={homeHref} aria-current={isActive(homeHref) ? "page" : undefined}>Produits</a>
+            </li>
+            <li class="fr-nav__item">
+              <a class="fr-nav__link" href={offreHref} aria-current={isActive(offreHref) ? "page" : undefined}>Offre</a>
+            </li>
+            <li class="fr-nav__item">
+              <a class="fr-nav__link" href="https://docs.numerique.gouv.fr/docs/3b526163-7327-4060-a23a-5c94176adc99/" target="_blank" rel="noopener noreferrer">Documentation</a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
   </header>
