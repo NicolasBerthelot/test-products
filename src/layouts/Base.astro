@@ -40,6 +40,22 @@ const chatIconUrl = `url("${import.meta.env.BASE_URL}icons/chat-line.svg")`;
       --ign-vert-clair: #1E7A6F;
     }
     .ign-hero .fr-container { padding-top: 2rem; padding-bottom: 1.5rem; }
+    .ign-teams-header-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .ign-teams-header-btn::before {
+      content: "";
+      flex: 0 0 auto;
+      width: 1rem;
+      height: 1rem;
+      background-color: currentColor;
+      -webkit-mask-image: var(--chatIconUrl);
+      mask-image: var(--chatIconUrl);
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+    }
     .ign-card-offre {
       display: inline-flex;
       align-items: center;
@@ -274,6 +290,22 @@ const chatIconUrl = `url("${import.meta.env.BASE_URL}icons/chat-line.svg")`;
                 <p class="fr-header__service-title">Produits IGN</p>
               </a>
               <p class="fr-header__service-tagline">Catalogue des produits numériques portés par les équipes de l'IGN</p>
+            </div>
+          </div>
+          <div class="fr-header__tools">
+            <div class="fr-header__tools-links">
+              <ul class="fr-btns-group">
+                <li>
+                  <a
+                    class="fr-btn ign-teams-header-btn"
+                    href="https://teams.microsoft.com/l/team/19%3A6JvfCSpE-uEzmEJ4ZpjR_rPWxN9nTgBLQQOnioZxbDA1%40thread.tacv2/conversations?groupId=54062afb-42c0-4a2e-aae5-17b05157968e&tenantId=3876b373-7e2c-4857-b024-53326b5b4bb2"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Rejoindre l'équipe Teams Mode Produit
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
