@@ -8,6 +8,7 @@ const DSFR_VERSION = "1.15.2";
 
 const homeHref = import.meta.env.BASE_URL;
 const offreHref = `${import.meta.env.BASE_URL}offre/`;
+const supportHref = `${import.meta.env.BASE_URL}demander-un-accompagnement/`;
 const currentPath = Astro.url.pathname;
 function isActive(href: string) {
   return currentPath === href || (href !== homeHref && currentPath.startsWith(href));
@@ -332,6 +333,9 @@ const chatIconUrl = `url("${import.meta.env.BASE_URL}icons/chat-line.svg")`;
             </li>
             <li class="fr-nav__item">
               <a class="fr-nav__link" href={offreHref} aria-current={isActive(offreHref) ? "page" : undefined}>Offre</a>
+            </li>
+            <li class="fr-nav__item">
+              <a class="fr-nav__link" href={supportHref} aria-current={isActive(supportHref) ? "page" : undefined}>Demander un accompagnement</a>
             </li>
             <li class="fr-nav__item">
               <a class="fr-nav__link" href="https://docs.numerique.gouv.fr/docs/5c50f061-15ea-4ca4-91a2-67147a9d9ca1/" target="_blank" rel="noopener noreferrer">Documentation</a>
