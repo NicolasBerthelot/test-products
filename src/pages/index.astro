@@ -18,97 +18,93 @@ function searchIndex(p: (typeof produits)[number]) {
 }
 ---
 <Base title="Accueil" description="Les produits numériques portés par les équipes de l'IGN : référentiels, observation du territoire et services associés.">
-  <section class="ign-hero">
-    <div class="fr-container">
-      <p class="fr-badge fr-badge--yellow-tournesol fr-mb-2w">Équipes produit</p>
-      <h1 class="fr-mb-2w">Les produits numériques portés par les équipes produit de l'IGN</h1>
-      <p class="fr-text--lead" style="max-width: 46rem;">
+  <section class="hero">
+    <div class="container">
+      <p class="kicker">Équipes produit</p>
+      <h1>Les produits numériques portés par les équipes produit de l'IGN</h1>
+      <p class="lead">
         Référentiels géographiques, observation du territoire, données ouvertes : découvrez {produits.length} produits que conçoivent et opèrent les équipes de l'IGN — pour savoir qui fait quoi, et qui contacter.
       </p>
     </div>
   </section>
 
-  <div class="ign-filters">
-    <div class="fr-container">
+  <div class="filters">
+    <div class="container">
       <button
         type="button"
-        class="ign-filters-toggle"
+        class="filters-toggle"
         id="filters-toggle"
         aria-expanded="false"
         aria-controls="filters-panel"
       >
         <span>Filtrer les produits</span>
-        <span class="ign-filters-toggle-value" id="filters-toggle-value">Toutes les offres</span>
+        <span class="filters-toggle__value" id="filters-toggle-value">Toutes les offres</span>
       </button>
 
-      <div class="ign-filters-panel" id="filters-panel">
-        <div class="fr-search-bar fr-mb-2w" role="search">
-          <label class="fr-label" for="product-search">Rechercher un produit</label>
-          <input
-            class="fr-input"
-            placeholder="Nom, promesse, équipe..."
-            type="search"
-            id="product-search"
-            name="product-search"
-          />
-          <button class="fr-btn" title="Rechercher" type="button">Rechercher</button>
+      <div class="filters__panel" id="filters-panel">
+        <div class="search" role="search">
+          <label class="filters__label" for="product-search">Rechercher un produit</label>
+          <div class="search__field">
+            <input
+              placeholder="Nom, promesse, équipe..."
+              type="search"
+              id="product-search"
+              name="product-search"
+            />
+          </div>
         </div>
 
-        <p class="fr-text--sm fr-mb-1w" style="font-weight: 700;">Filtrer par offre</p>
-        <ul class="fr-tags-group" id="offre-filters">
-          <li>
-            <button class="fr-tag ign-chip" data-offre="all" aria-pressed="true">
-              Toutes les offres ({produits.length})
-            </button>
-          </li>
-          {offres.map((offre) => {
-            const count = produits.filter((p) => p.offre === offre).length;
-            return (
-              <li>
-                <button class="fr-tag ign-chip" data-offre={offre} aria-pressed="false">
-                  {offre} ({count})
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        <div class="filter-group">
+          <p class="filters__label">Filtrer par offre</p>
+          <ul class="chips" id="offre-filters">
+            <li>
+              <button class="chip" type="button" data-offre="all" aria-pressed="true">
+                Toutes les offres ({produits.length})
+              </button>
+            </li>
+            {offres.map((offre) => {
+              const count = produits.filter((p) => p.offre === offre).length;
+              return (
+                <li>
+                  <button class="chip" type="button" data-offre={offre} aria-pressed="false">
+                    {offre} ({count})
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 
-  <section class="fr-container fr-py-6w">
-    <div class="fr-grid-row fr-grid-row--gutters" id="product-grid">
+  <section class="container section">
+    <div class="card-grid" id="product-grid">
       {produits.map((p) => (
-        <div class="fr-col-12 fr-col-md-6 fr-col-lg-4 product-item" data-offre={p.offre} data-search={searchIndex(p)}>
-          <div class="fr-card fr-enlarge-link ign-product-card">
+        <div class="product-item" data-offre={p.offre} data-search={searchIndex(p)}>
+          <article class="card">
             {p.image && (
-              <div class="fr-card__img">
-                <img
-                  class="fr-responsive-img ign-card-image"
-                  src={p.image.startsWith("http") ? p.image : `${import.meta.env.BASE_URL}${p.image}`}
-                  alt=""
-                />
-              </div>
+              <img
+                class="card__img"
+                src={p.image.startsWith("http") ? p.image : `${import.meta.env.BASE_URL}${p.image}`}
+                alt=""
+              />
             )}
-            <div class="fr-card__body">
-              <div class="fr-card__content">
-                {p.offre && <p class="ign-card-offre fr-mb-1w">{p.offre}</p>}
-                <h3 class="fr-card__title">
-                  <a href={`${import.meta.env.BASE_URL}produits/${p.slug}/`}>{p.nom}</a>
-                </h3>
-                <p class="fr-card__desc">{p.promesse || p.propositionValeur || "Description à venir."}</p>
-                <div class="fr-card__end">
-                  {p.derniereMiseAJour && (
-                    <p class="ign-updated">Mis à jour le {p.derniereMiseAJour.trim()}</p>
-                  )}
-                </div>
-              </div>
+            <div class="card__body">
+              {p.offre && <p class="card__offre">{p.offre}</p>}
+              <h2 class="card__title">
+                <a href={`${import.meta.env.BASE_URL}produits/${p.slug}/`}>{p.nom}</a>
+              </h2>
+              <p class="card__desc">{p.promesse || p.propositionValeur || "Description à venir."}</p>
+              {p.derniereMiseAJour && (
+                <p class="card__meta">Mis à jour le {p.derniereMiseAJour.trim()}</p>
+              )}
             </div>
-          </div>
+          </article>
         </div>
       ))}
     </div>
-    <p id="empty-state" class="fr-hidden fr-mt-4w" aria-live="polite">Aucun produit ne correspond à ces critères.</p>
+    <p id="empty-state" hidden aria-live="polite">Aucun produit ne correspond à ces critères.</p>
   </section>
 
   <script>
@@ -117,7 +113,7 @@ function searchIndex(p: (typeof produits)[number]) {
       return s.normalize("NFD").replace(DIACRITICS, "").toLowerCase();
     }
 
-    const buttons = document.querySelectorAll<HTMLButtonElement>("#offre-filters .ign-chip");
+    const buttons = document.querySelectorAll<HTMLButtonElement>("#offre-filters .chip");
     const items = document.querySelectorAll<HTMLElement>(".product-item");
     const emptyState = document.getElementById("empty-state");
     const searchInput = document.querySelector<HTMLInputElement>("#product-search");
@@ -137,7 +133,7 @@ function searchIndex(p: (typeof produits)[number]) {
         item.style.display = match ? "" : "none";
         if (match) visibleCount++;
       });
-      emptyState?.classList.toggle("fr-hidden", visibleCount > 0);
+      if (emptyState) emptyState.hidden = visibleCount > 0;
     }
 
     buttons.forEach((btn) => {
@@ -155,7 +151,7 @@ function searchIndex(p: (typeof produits)[number]) {
     filtersToggle?.addEventListener("click", () => {
       const expanded = filtersToggle.getAttribute("aria-expanded") === "true";
       filtersToggle.setAttribute("aria-expanded", String(!expanded));
-      filtersPanel?.classList.toggle("ign-filters-panel--open", !expanded);
+      filtersPanel?.classList.toggle("is-open", !expanded);
     });
   </script>
 </Base>

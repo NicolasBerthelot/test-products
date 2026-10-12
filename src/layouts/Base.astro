@@ -1,10 +1,17 @@
 ---
+import "@fontsource/fira-sans/500.css";
+import "@fontsource/fira-sans/700.css";
+import "@fontsource/fira-sans/800.css";
+import "@fontsource/open-sans/400.css";
+import "@fontsource/open-sans/600.css";
+import "@fontsource/open-sans/700.css";
+import "../styles/global.css";
+
 interface Props {
   title: string;
   description?: string;
 }
 const { title, description = "Catalogue interne des produits numériques portés par les équipes de l'IGN" } = Astro.props;
-const DSFR_VERSION = "1.15.2";
 
 const homeHref = import.meta.env.BASE_URL;
 const offreHref = `${import.meta.env.BASE_URL}offre/`;
@@ -13,368 +20,89 @@ const currentPath = Astro.url.pathname;
 function isActive(href: string) {
   return currentPath === href || (href !== homeHref && currentPath.startsWith(href));
 }
-// dsfr.min.css ne définit pas de classe générique .fr-icon-mail-line (seule
-// une poignée d'icônes utilisées par les composants DSFR eux-mêmes sont
-// incluses) : on référence directement le SVG de la même façon que le fait
-// .fr-btn--mail dans dsfr.min.css.
-// `url(var(--x))` n'est pas supporté par les navigateurs (le token url()
-// est consommé avant la substitution de la variable) : on stocke donc la
-// fonction url() complète dans la variable CSS elle-même.
-const mailIconUrl = `url("https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@${DSFR_VERSION}/dist/icons/business/mail-line.svg")`;
-// Pas d'icône Teams/discussion dans le set DSFR (le CDN ne sert que les 61
-// SVG effectivement utilisés par ses propres composants, pas tout Remix
-// Icon) : icône "bulle de discussion" générique, auto-hébergée.
-const chatIconUrl = `url("${import.meta.env.BASE_URL}icons/chat-line.svg")`;
 ---
 <!doctype html>
-<html lang="fr" data-fr-scheme="system">
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content={description} />
   <title>{title} · Equipes Produits IGN</title>
-  <link rel="stylesheet" href={`https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@${DSFR_VERSION}/dist/dsfr.min.css`} />
-  <link rel="icon" href={`https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@${DSFR_VERSION}/dist/favicon/favicon.svg`} type="image/svg+xml" />
-  <style is:global define:vars={{ mailIconUrl, chatIconUrl }}>
-    :root {
-      --ign-vert: #00524C;
-      --ign-vert-clair: #1E7A6F;
-    }
-    .ign-hero .fr-container { padding-top: 2rem; padding-bottom: 1.5rem; }
-    .ign-teams-header-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .ign-teams-header-btn::before {
-      content: "";
-      flex: 0 0 auto;
-      width: 1rem;
-      height: 1rem;
-      background-color: currentColor;
-      -webkit-mask-image: var(--chatIconUrl);
-      mask-image: var(--chatIconUrl);
-      -webkit-mask-size: 100% 100%;
-      mask-size: 100% 100%;
-    }
-    .ign-card-offre {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.375rem;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.03em;
-      color: var(--ign-vert);
-    }
-    .ign-card-offre::before {
-      content: "";
-      width: 0.5rem;
-      height: 0.5rem;
-      border-radius: 50%;
-      background: currentColor;
-      display: inline-block;
-    }
-    .ign-filters {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: var(--background-default-grey);
-      border-bottom: 1px solid var(--border-default-grey);
-      padding: 1rem 0;
-    }
-    .ign-chip {
-      cursor: pointer;
-    }
-    .ign-filters-toggle {
-      display: none;
-      width: 100%;
-      align-items: center;
-      justify-content: space-between;
-      gap: 0.75rem;
-      padding: 0.5rem 0;
-      background: none;
-      border: none;
-      font-weight: 700;
-      color: var(--ign-vert);
-      cursor: pointer;
-    }
-    .ign-filters-toggle::after {
-      content: "";
-      flex: 0 0 auto;
-      width: 0.5rem;
-      height: 0.5rem;
-      border-right: 2px solid currentColor;
-      border-bottom: 2px solid currentColor;
-      transform: rotate(45deg);
-      transition: transform 0.15s ease;
-    }
-    .ign-filters-toggle[aria-expanded="true"]::after {
-      transform: rotate(-135deg);
-    }
-    .ign-filters-toggle-value {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-weight: 400;
-      color: var(--text-mention-grey, #666);
-    }
-    @media (max-width: 48em) {
-      .ign-filters-toggle {
-        display: flex;
-      }
-      .ign-filters-panel {
-        display: none;
-        padding-top: 0.5rem;
-      }
-      .ign-filters-panel.ign-filters-panel--open {
-        display: block;
-      }
-    }
-    .ign-product-card {
-      height: 100%;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-    .ign-meta-list dt {
-      font-size: 0.8125rem;
-      color: var(--text-mention-grey, #666);
-      margin-top: 1rem;
-    }
-    .ign-meta-list dd {
-      margin: 0;
-      font-weight: 500;
-    }
-    .ign-updated {
-      font-size: 0.8125rem;
-      color: var(--text-mention-grey, #666);
-    }
-    .ign-toc {
-      position: sticky;
-      top: 1.5rem;
-    }
-    .ign-toc.fr-summary {
-      background-color: transparent;
-    }
-    .ign-toc .fr-summary__link::before {
-      content: none;
-    }
-    [id] {
-      scroll-margin-top: 1.5rem;
-    }
-    .ign-card-image {
-      height: 12rem;
-      object-fit: cover;
-      width: 100%;
-    }
-    .ign-product-image {
-      display: block;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-      border-radius: 0.25rem;
-    }
-    .ign-markdown :is(h3, h4, h5, h6) {
-      margin-top: 1.5rem;
-    }
-    .ign-markdown p {
-      margin: 0 0 1rem;
-    }
-    .ign-markdown ul,
-    .ign-markdown ol {
-      padding-left: 1.5rem;
-      margin: 0 0 1rem;
-    }
-    .ign-markdown a {
-      color: var(--ign-vert);
-    }
-    .ign-markdown img {
-      display: block;
-      width: 100%;
-      max-width: 640px;
-      margin: 0.5rem auto 1.5rem;
-      border-radius: 0.25rem;
-    }
-    .ign-team-section {
-      border-top: 1px solid var(--border-default-grey);
-    }
-    .ign-team-card {
-      text-align: center;
-      height: 100%;
-      padding: 1.25rem 0.75rem;
-      border: 1px solid var(--border-default-grey);
-      border-radius: 0.25rem;
-      background: var(--background-alt-grey);
-    }
-    .ign-avatar-lg {
-      width: 5.5rem;
-      height: 5.5rem;
-      border-radius: 50%;
-      object-fit: cover;
-      display: block;
-      margin: 0 auto 0.75rem;
-    }
-    .ign-team-name {
-      font-weight: 700;
-      margin: 0;
-    }
-    .ign-team-actions {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-      margin: 0.25rem 0 0;
-    }
-    .ign-team-icon {
-      display: inline-flex;
-      color: var(--text-mention-grey, #666);
-      background-image: none;
-    }
-    .ign-team-icon:hover {
-      color: var(--ign-vert);
-    }
-    .ign-team-icon::before {
-      content: "";
-      display: inline-block;
-      width: 1rem;
-      height: 1rem;
-      background-color: currentColor;
-      -webkit-mask-size: 100% 100%;
-      mask-size: 100% 100%;
-    }
-    .ign-team-mail::before {
-      -webkit-mask-image: var(--mailIconUrl);
-      mask-image: var(--mailIconUrl);
-    }
-    .ign-team-teams::before {
-      -webkit-mask-image: var(--chatIconUrl);
-      mask-image: var(--chatIconUrl);
-    }
-    /* dsfr.min.css ajoute automatiquement une flèche "lien externe" à tout
-       [target=_blank] : pas utile ici, le picto suffit. */
-    .ign-team-icon.ign-team-teams::after {
-      content: none;
-    }
-    .ign-team-role {
-      font-size: 0.8125rem;
-      color: var(--text-mention-grey, #666);
-      margin: 0.125rem 0 0;
-    }
-    .ign-service-tag {
-      display: inline-block;
-      margin-top: 0.375rem;
-      padding: 0.125rem 0.5rem;
-      border-radius: 1rem;
-      font-size: 0.6875rem;
-      font-weight: 700;
-      color: #fff;
-    }
-  </style>
+  <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} type="image/svg+xml" />
 </head>
 <body>
-  <header role="banner" class="fr-header">
-    <div class="fr-header__body">
-      <div class="fr-container">
-        <div class="fr-header__body-row">
-          <div class="fr-header__brand fr-enlarge-link">
-            <div class="fr-header__brand-top">
-              <div class="fr-header__logo">
-                <p class="fr-logo">
-                  République<br />Française
-                </p>
-              </div>
-              <div class="fr-header__navbar">
-                <button class="fr-btn--menu fr-btn" data-fr-opened="false" aria-controls="ign-header-modal" aria-haspopup="menu" id="ign-header-menu-button" title="Menu">Menu</button>
-              </div>
-            </div>
-            <div class="fr-header__service">
-              <a href={import.meta.env.BASE_URL} title="Accueil - Equipes Produits IGN">
-                <p class="fr-header__service-title">Equipes Produits IGN</p>
-              </a>
-              <p class="fr-header__service-tagline">Catalogue des produits numériques portés par les équipes de l'IGN</p>
-            </div>
-          </div>
-          <div class="fr-header__tools">
-            <div class="fr-header__tools-links">
-              <ul class="fr-btns-group">
-                <li>
-                  <a
-                    class="fr-btn"
-                    href="https://grist.numerique.gouv.fr/o/docs/toCYiKQga5KP/Fiches-produits?utm_id=share-doc"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Ajouter un produit
-                  </a>
-                </li>
-                <li>
-                  <a
-                    class="fr-btn ign-teams-header-btn"
-                    href="https://teams.microsoft.com/l/team/19%3A6JvfCSpE-uEzmEJ4ZpjR_rPWxN9nTgBLQQOnioZxbDA1%40thread.tacv2/conversations?groupId=54062afb-42c0-4a2e-aae5-17b05157968e&tenantId=3876b373-7e2c-4857-b024-53326b5b4bb2"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Rejoindre l'équipe Teams Mode Produit
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+  <a class="skip-link" href="#content">Aller au contenu</a>
+  <header class="site-header" id="site-header">
+    <div class="container site-header__top">
+      <a class="brand" href={homeHref}>
+        <span class="brand__mark" aria-hidden="true"></span>
+        <span>
+          <span class="brand__title">Equipes Produits IGN</span>
+          <span class="brand__tagline">Catalogue des produits numériques portés par les équipes de l'IGN</span>
+        </span>
+      </a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav-band">Menu</button>
     </div>
-    <div class="fr-header__menu fr-modal" id="ign-header-modal" aria-labelledby="ign-header-menu-button">
-      <div class="fr-container">
-        <button class="fr-btn--close fr-btn" aria-controls="ign-header-modal" title="Fermer">Fermer</button>
-        <div class="fr-header__menu-links"></div>
-        <nav class="fr-nav" id="ign-header-navigation" role="navigation" aria-label="Menu principal">
-          <ul class="fr-nav__list">
-            <li class="fr-nav__item">
-              <a class="fr-nav__link" href={homeHref} aria-current={isActive(homeHref) ? "page" : undefined}>Produits</a>
-            </li>
-            <li class="fr-nav__item">
-              <a class="fr-nav__link" href={offreHref} aria-current={isActive(offreHref) ? "page" : undefined}>Offre</a>
-            </li>
-            <li class="fr-nav__item">
-              <a class="fr-nav__link" href={supportHref} aria-current={isActive(supportHref) ? "page" : undefined}>Demander un accompagnement</a>
-            </li>
-            <li class="fr-nav__item">
-              <a class="fr-nav__link" href="https://docs.numerique.gouv.fr/docs/5c50f061-15ea-4ca4-91a2-67147a9d9ca1/" target="_blank" rel="noopener noreferrer">Documentation</a>
-            </li>
+    <div class="site-nav-band" id="site-nav-band">
+      <div class="container site-nav-band__inner">
+        <nav class="main-nav" aria-label="Menu principal">
+          <ul>
+            <li><a href={homeHref} aria-current={isActive(homeHref) ? "page" : undefined}>Produits</a></li>
+            <li><a href={offreHref} aria-current={isActive(offreHref) ? "page" : undefined}>Offre</a></li>
+            <li><a href={supportHref} aria-current={isActive(supportHref) ? "page" : undefined}>Demander un accompagnement</a></li>
+            <li><a href="https://docs.numerique.gouv.fr/docs/5c50f061-15ea-4ca4-91a2-67147a9d9ca1/" target="_blank" rel="noopener noreferrer">Documentation</a></li>
           </ul>
         </nav>
+        <ul class="header-tools">
+          <li>
+            <a
+              class="btn btn--secondary btn--sm"
+              href="https://grist.numerique.gouv.fr/o/docs/toCYiKQga5KP/Fiches-produits?utm_id=share-doc"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Ajouter un produit
+            </a>
+          </li>
+          <li>
+            <a
+              class="btn btn--sm btn-teams"
+              href="https://teams.microsoft.com/l/team/19%3A6JvfCSpE-uEzmEJ4ZpjR_rPWxN9nTgBLQQOnioZxbDA1%40thread.tacv2/conversations?groupId=54062afb-42c0-4a2e-aae5-17b05157968e&tenantId=3876b373-7e2c-4857-b024-53326b5b4bb2"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Rejoindre l'équipe Teams Mode Produit
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
   </header>
-  <main role="main" id="content">
+  <main id="content">
     <slot />
   </main>
-  <footer class="fr-footer" role="contentinfo">
-    <div class="fr-container">
-      <div class="fr-footer__body">
-        <div class="fr-footer__brand fr-enlarge-link">
-          <p class="fr-logo">
-            République<br />Française
-          </p>
-        </div>
-        <div class="fr-footer__content">
-          <p class="fr-footer__content-desc">
-            Ce catalogue valorise les produits numériques conçus et opérés par les équipes de l'IGN, à destination des agents de l'institut.
-          </p>
-        </div>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__body">
+        <p class="site-footer__brand">Equipes Produits IGN</p>
+        <p class="site-footer__desc">
+          Ce catalogue valorise les produits numériques conçus et opérés par les équipes de l'IGN, à destination des agents de l'institut.
+        </p>
       </div>
-      <div class="fr-footer__bottom">
-        <ul class="fr-footer__bottom-list">
-          <li class="fr-footer__bottom-item">
-            <a class="fr-footer__bottom-link" href="https://www.ign.fr">ign.fr</a>
-          </li>
-        </ul>
-        <div class="fr-footer__bottom-copy">
-          <p>Données issues de la base produits IGN — prototype de démonstration.</p>
-        </div>
+      <div class="site-footer__bottom">
+        <a href="https://www.ign.fr">ign.fr</a>
+        <p>Données issues de la base produits IGN — prototype de démonstration.</p>
       </div>
     </div>
   </footer>
-  <script type="module" src={`https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@${DSFR_VERSION}/dist/dsfr.module.min.js`}></script>
-  <script nomodule src={`https://cdn.jsdelivr.net/npm/@gouvfr/dsfr@${DSFR_VERSION}/dist/dsfr.nomodule.min.js`}></script>
+  <script>
+    const header = document.getElementById("site-header");
+    const toggle = document.getElementById("menu-toggle");
+    toggle?.addEventListener("click", () => {
+      const open = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!open));
+      header?.classList.toggle("is-open", !open);
+    });
+  </script>
 </body>
 </html>

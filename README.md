@@ -1,6 +1,6 @@
-# Produits IGN — prototype
+# Equipes Produits IGN — prototype
 
-Site vitrine des produits numériques de l'IGN, sur le modèle de [beta.gouv.fr/startups](https://beta.gouv.fr/startups) et utilisant le [Système de Design de l'État (DSFR)](https://www.systeme-de-design.gouv.fr/).
+Site vitrine des produits numériques de l'IGN, sur le modèle de [beta.gouv.fr/startups](https://beta.gouv.fr/startups), avec une identité visuelle inspirée des sites IGN ([ign.fr](https://www.ign.fr/), [remonterletemps.ign.fr](https://remonterletemps.ign.fr/)).
 
 ## Démarrer
 
@@ -16,14 +16,20 @@ npm run preview  # prévisualise le build
 ```
 src/
   data/produits.json        ← données produits (synchronisées depuis l'API Grist)
-  layouts/Base.astro         ← header/footer DSFR, styles communs
+  layouts/Base.astro         ← en-tête, menu, pied de page
+  styles/global.css          ← toute la mise en forme du site (couleurs, composants)
+  assets/icons/              ← icônes SVG (Remix Icon, licence Apache 2.0)
   pages/index.astro          ← page d'accueil : hero + filtres + grille de cartes
   pages/produits/[slug].astro ← fiche produit (une page par produit)
 ```
 
-Le DSFR est chargé via CDN (jsDelivr, version 1.15.2) dans `Base.astro` — pas de
-build DSFR à gérer, mais possibilité de passer au package npm officiel
-(`@gouvfr/dsfr`) si besoin d'un contrôle plus fin ou d'un usage hors-ligne.
+Le site n'utilise **pas** le Système de Design de l'État (DSFR), réservé aux
+sites gouvernementaux : ni sa feuille de style, ni la police Marianne, ni le bloc
+« République Française ». La mise en forme tient dans `src/styles/global.css` ;
+les couleurs sont regroupées en variables en tête de fichier (`--primary` pour le
+vert, `--accent` pour le vert clair, etc.) pour pouvoir être ajustées en un seul
+endroit. Les polices Fira Sans et Open Sans (licence libre OFL) sont servies par
+le site lui-même via les paquets npm `@fontsource/*`, sans appel à Google Fonts.
 
 ## Données : synchronisation live avec Grist
 
