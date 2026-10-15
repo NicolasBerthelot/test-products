@@ -12,7 +12,7 @@ interface Props {
   title: string;
   description?: string;
 }
-const { title, description = "L'offre numérique de l'IGN et les ressources du mode produit, pour les agents de l'institut." } = Astro.props;
+const { title, description = "L'offre de l'IGN et les ressources du mode produit, pour les agents de l'institut." } = Astro.props;
 
 const base = import.meta.env.BASE_URL;
 const path = Astro.url.pathname;
@@ -67,7 +67,7 @@ const current = sections.find((s) => s.active);
         <span class="brand__mark" aria-hidden="true"></span>
         <span>
           <span class="brand__title">Equipes Produits IGN</span>
-          <span class="brand__tagline">L'offre numérique de l'IGN et le mode produit</span>
+          <span class="brand__tagline">L'offre de l'IGN et le mode produit</span>
         </span>
       </a>
     </div>
@@ -107,7 +107,7 @@ const current = sections.find((s) => s.active);
       <div class="site-footer__body">
         <p class="site-footer__brand">Equipes Produits IGN</p>
         <p class="site-footer__desc">
-          Ce site présente l'offre numérique conçue et opérée par les équipes de l'IGN, et rassemble les ressources du mode produit, à destination des agents de l'institut.
+          Ce site présente l'offre de l'IGN, conçue et opérée par ses équipes, et rassemble les ressources du mode produit, à destination des agents de l'institut.
         </p>
       </div>
       <div class="site-footer__bottom">
