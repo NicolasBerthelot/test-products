@@ -6,21 +6,49 @@ import "@fontsource/open-sans/400.css";
 import "@fontsource/open-sans/600.css";
 import "@fontsource/open-sans/700.css";
 import "../styles/global.css";
+import { LIENS } from "../lib/liens";
 
 interface Props {
   title: string;
   description?: string;
 }
-const { title, description = "Catalogue interne des produits numériques portés par les équipes de l'IGN" } = Astro.props;
+const { title, description = "L'offre numérique de l'IGN et les ressources du mode produit, pour les agents de l'institut." } = Astro.props;
 
-const homeHref = import.meta.env.BASE_URL;
-const offreHref = `${import.meta.env.BASE_URL}offre/`;
-const agendaHref = `${import.meta.env.BASE_URL}agenda/`;
-const supportHref = `${import.meta.env.BASE_URL}demander-un-accompagnement/`;
-const currentPath = Astro.url.pathname;
-function isActive(href: string) {
-  return currentPath === href || (href !== homeHref && currentPath.startsWith(href));
+const base = import.meta.env.BASE_URL;
+const path = Astro.url.pathname;
+const modeProduitHref = `${base}mode-produit/`;
+
+interface Tab {
+  label: string;
+  href: string;
+  active?: boolean;
+  external?: boolean;
 }
+
+const sections: { label: string; href: string; active: boolean; tabs: Tab[] }[] = [
+  {
+    label: "L'offre IGN",
+    href: base,
+    active: !path.startsWith(modeProduitHref),
+    tabs: [
+      { label: "Produits", href: base, active: path === base || path.startsWith(`${base}produits/`) },
+      { label: "Familles d'offre", href: `${base}offre/`, active: path.startsWith(`${base}offre/`) },
+    ],
+  },
+  {
+    label: "Le mode produit",
+    href: modeProduitHref,
+    active: path.startsWith(modeProduitHref),
+    tabs: [
+      { label: "Présentation", href: modeProduitHref, active: path === modeProduitHref },
+      { label: "Agenda", href: `${modeProduitHref}agenda/`, active: path.startsWith(`${modeProduitHref}agenda/`) },
+      { label: "Être accompagné", href: `${modeProduitHref}accompagnement/`, active: path.startsWith(`${modeProduitHref}accompagnement/`) },
+      { label: "Documentation", href: LIENS.documentation, external: true },
+      { label: "Communauté Teams", href: LIENS.teams, external: true },
+    ],
+  },
+];
+const current = sections.find((s) => s.active);
 ---
 <!doctype html>
 <html lang="fr">
@@ -29,56 +57,47 @@ function isActive(href: string) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content={description} />
   <title>{title} · Equipes Produits IGN</title>
-  <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.ico`} type="image/x-icon" />
+  <link rel="icon" href={`${base}favicon.ico`} type="image/x-icon" />
 </head>
 <body>
   <a class="skip-link" href="#content">Aller au contenu</a>
-  <header class="site-header" id="site-header">
+  <header class="site-header">
     <div class="container site-header__top">
-      <a class="brand" href={homeHref}>
+      <a class="brand" href={base}>
         <span class="brand__mark" aria-hidden="true"></span>
         <span>
           <span class="brand__title">Equipes Produits IGN</span>
-          <span class="brand__tagline">Catalogue des produits numériques portés par les équipes de l'IGN</span>
+          <span class="brand__tagline">L'offre numérique de l'IGN et le mode produit</span>
         </span>
       </a>
-      <button class="menu-toggle" id="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav-band">Menu</button>
     </div>
-    <div class="site-nav-band" id="site-nav-band">
-      <div class="container site-nav-band__inner">
-        <nav class="main-nav" aria-label="Menu principal">
-          <ul>
-            <li><a href={homeHref} aria-current={isActive(homeHref) ? "page" : undefined}>Produits</a></li>
-            <li><a href={offreHref} aria-current={isActive(offreHref) ? "page" : undefined}>Offre</a></li>
-            <li><a href={agendaHref} aria-current={isActive(agendaHref) ? "page" : undefined}>Agenda</a></li>
-            <li><a href={supportHref} aria-current={isActive(supportHref) ? "page" : undefined}>Demander un accompagnement</a></li>
-            <li><a href="https://docs.numerique.gouv.fr/docs/5c50f061-15ea-4ca4-91a2-67147a9d9ca1/" target="_blank" rel="noopener noreferrer">Documentation</a></li>
-          </ul>
-        </nav>
-        <ul class="header-tools">
-          <li>
-            <a
-              class="btn btn--secondary btn--sm"
-              href="https://grist.numerique.gouv.fr/o/docs/toCYiKQga5KP/Fiches-produits?utm_id=share-doc"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Ajouter un produit
-            </a>
-          </li>
-          <li>
-            <a
-              class="btn btn--sm btn-teams"
-              href="https://teams.microsoft.com/l/team/19%3A6JvfCSpE-uEzmEJ4ZpjR_rPWxN9nTgBLQQOnioZxbDA1%40thread.tacv2/conversations?groupId=54062afb-42c0-4a2e-aae5-17b05157968e&tenantId=3876b373-7e2c-4857-b024-53326b5b4bb2"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Rejoindre l'équipe Teams Mode Produit
-            </a>
-          </li>
+    <nav class="main-nav" aria-label="Rubriques">
+      <div class="container">
+        <ul>
+          {sections.map((s) => (
+            <li><a href={s.href} aria-current={s.active ? "true" : undefined}>{s.label}</a></li>
+          ))}
         </ul>
       </div>
-    </div>
+    </nav>
+    {current && (
+      <nav class="subnav" aria-label={current.label}>
+        <div class="container">
+          <ul>
+            {current.tabs.map((t) => (
+              <li>
+                <a
+                  href={t.href}
+                  aria-current={t.active ? "page" : undefined}
+                  target={t.external ? "_blank" : undefined}
+                  rel={t.external ? "noopener noreferrer" : undefined}
+                >{t.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+    )}
   </header>
   <main id="content">
     <slot />
@@ -88,7 +107,7 @@ function isActive(href: string) {
       <div class="site-footer__body">
         <p class="site-footer__brand">Equipes Produits IGN</p>
         <p class="site-footer__desc">
-          Ce catalogue valorise les produits numériques conçus et opérés par les équipes de l'IGN, à destination des agents de l'institut.
+          Ce site présente l'offre numérique conçue et opérée par les équipes de l'IGN, et rassemble les ressources du mode produit, à destination des agents de l'institut.
         </p>
       </div>
       <div class="site-footer__bottom">
@@ -97,14 +116,5 @@ function isActive(href: string) {
       </div>
     </div>
   </footer>
-  <script>
-    const header = document.getElementById("site-header");
-    const toggle = document.getElementById("menu-toggle");
-    toggle?.addEventListener("click", () => {
-      const open = toggle.getAttribute("aria-expanded") === "true";
-      toggle.setAttribute("aria-expanded", String(!open));
-      header?.classList.toggle("is-open", !open);
-    });
-  </script>
 </body>
 </html>

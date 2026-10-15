@@ -1,25 +1,8 @@
 ---
-import Base from "../layouts/Base.astro";
-import { loadAgenda, TIME_ZONE, type AgendaEvent } from "../lib/agenda";
+import Base from "../../layouts/Base.astro";
+import { loadAgenda, jour, mois, dateLongue, quand, type AgendaEvent } from "../../lib/agenda";
 
 const { aVenir, passes, indisponible } = await loadAgenda();
-
-const fmt = (options: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat("fr-FR", { timeZone: TIME_ZONE, ...options });
-const dayFmt = fmt({ day: "numeric" });
-const monthFmt = fmt({ month: "short" });
-const dateFmt = fmt({ weekday: "long", day: "numeric", month: "long", year: "numeric" });
-const timeFmt = fmt({ hour: "2-digit", minute: "2-digit" });
-const isoDayFmt = new Intl.DateTimeFormat("en-CA", { timeZone: TIME_ZONE });
-
-const time = (d: Date) => timeFmt.format(d).replace(":", "h");
-
-function quand(e: AgendaEvent) {
-  if (!e.fin) return `${dateFmt.format(e.debut)}, ${time(e.debut)}`;
-  if (isoDayFmt.format(e.debut) === isoDayFmt.format(e.fin)) {
-    return `${dateFmt.format(e.debut)}, ${time(e.debut)} – ${time(e.fin)}`;
-  }
-  return `du ${dateFmt.format(e.debut)}, ${time(e.debut)} au ${dateFmt.format(e.fin)}, ${time(e.fin)}`;
-}
 
 function places(e: AgendaEvent) {
   if (e.placesRestantes !== null && e.capacite !== null) return `${e.placesRestantes} places restantes sur ${e.capacite}`;
@@ -37,7 +20,7 @@ function statusClass(e: AgendaEvent) {
 <Base title="Agenda" description="Formations, ateliers et temps forts du mode produit à l'IGN.">
   <section class="hero">
     <div class="container">
-      <p class="kicker">Mode produit</p>
+      <p class="kicker">Le mode produit</p>
       <h1>Agenda</h1>
       <p class="lead">Formations, ateliers et temps forts pour faire vivre le mode produit à l'IGN.</p>
     </div>
@@ -52,10 +35,10 @@ function statusClass(e: AgendaEvent) {
         {aVenir.length === 0 && <p class="muted">Aucun événement programmé pour le moment.</p>}
         <div class="event-list">
           {aVenir.map((e) => (
-            <article class:list={["event", { "event--cancelled": e.annule }]}>
+            <article class:list={["event", { "event--cancelled": e.annule }]} id={`evenement-${e.id}`}>
               <div class="event__date" aria-hidden="true">
-                <span class="event__day">{dayFmt.format(e.debut)}</span>
-                <span class="event__month">{monthFmt.format(e.debut)}</span>
+                <span class="event__day">{jour(e.debut)}</span>
+                <span class="event__month">{mois(e.debut)}</span>
               </div>
               <div class="event__body">
                 <p class="event__tags">
@@ -88,7 +71,7 @@ function statusClass(e: AgendaEvent) {
             <ul>
               {passes.map((e) => (
                 <li>
-                  <span class="muted">{dateFmt.format(e.debut)}</span> — {e.titre}
+                  <span class="muted">{dateLongue(e.debut)}</span> — {e.titre}
                   {e.type && <span class="muted"> · {e.type}</span>}
                 </li>
               ))}

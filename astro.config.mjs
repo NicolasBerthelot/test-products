@@ -7,4 +7,7 @@ export default defineConfig({
   site: 'https://nicolasberthelot.github.io',
   // Nom du dépôt : GitHub Pages sert un projet à /<repo>/, pas à la racine.
   base: '/test-products/',
+  redirects: {
+    '/demander-un-accompagnement': '/test-products/mode-produit/accompagnement/',
+  },
 });

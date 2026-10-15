@@ -1,6 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import produits from "../data/produits.json";
+import { LIENS } from "../lib/liens";
 
 // Ordre de première apparition (= ordre des lignes dans la table Produits sur
 // Grist, où les produits sont groupés par offre), pas un tri alphabétique.
@@ -20,10 +21,14 @@ function searchIndex(p: (typeof produits)[number]) {
 <Base title="Accueil" description="Les produits numériques portés par les équipes de l'IGN : référentiels, observation du territoire et services associés.">
   <section class="hero">
     <div class="container">
-      <p class="kicker">Équipes produit</p>
+      <p class="kicker">L'offre IGN</p>
       <h1>Les produits numériques portés par les équipes produit de l'IGN</h1>
       <p class="lead">
         Référentiels géographiques, observation du territoire, données ouvertes : découvrez {produits.length} produits que conçoivent et opèrent les équipes de l'IGN — pour savoir qui fait quoi, et qui contacter.
+      </p>
+      <p class="hero__note">
+        Votre produit n'apparaît pas ?
+        <a href={LIENS.referencerProduit} target="_blank" rel="noopener noreferrer">Référencez-le dans le catalogue</a>.
       </p>
     </div>
   </section>

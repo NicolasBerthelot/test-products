@@ -6,7 +6,7 @@ import { renderMarkdown } from "./markdown";
 const GRIST_BASE_URL = "https://grist.numerique.gouv.fr";
 const DOC_ID = "fDwUxVHDoVqQ";
 const TABLE = "Evenements";
-export const TIME_ZONE = "Europe/Paris";
+const TIME_ZONE = "Europe/Paris";
 
 export interface AgendaEvent {
   id: number;
@@ -139,4 +139,24 @@ export async function loadAgenda(): Promise<Agenda> {
     passes: events.filter(isPast).reverse(),
     indisponible: false,
   };
+}
+
+const fmt = (options: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat("fr-FR", { timeZone: TIME_ZONE, ...options });
+const dayFmt = fmt({ day: "numeric" });
+const monthFmt = fmt({ month: "short" });
+const dateFmt = fmt({ weekday: "long", day: "numeric", month: "long", year: "numeric" });
+const timeFmt = fmt({ hour: "2-digit", minute: "2-digit" });
+const isoDayFmt = new Intl.DateTimeFormat("en-CA", { timeZone: TIME_ZONE });
+
+export const jour = (d: Date) => dayFmt.format(d);
+export const mois = (d: Date) => monthFmt.format(d);
+export const dateLongue = (d: Date) => dateFmt.format(d);
+const heure = (d: Date) => timeFmt.format(d).replace(":", "h");
+
+export function quand(e: AgendaEvent) {
+  if (!e.fin) return `${dateLongue(e.debut)}, ${heure(e.debut)}`;
+  if (isoDayFmt.format(e.debut) === isoDayFmt.format(e.fin)) {
+    return `${dateLongue(e.debut)}, ${heure(e.debut)} – ${heure(e.fin)}`;
+  }
+  return `du ${dateLongue(e.debut)}, ${heure(e.debut)} au ${dateLongue(e.fin)}, ${heure(e.fin)}`;
 }

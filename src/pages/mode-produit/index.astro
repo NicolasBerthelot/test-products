@@ -1,0 +1,91 @@
+---
+import Base from "../../layouts/Base.astro";
+import { loadAgenda, jour, mois, quand } from "../../lib/agenda";
+import { LIENS } from "../../lib/liens";
+
+const agendaHref = `${import.meta.env.BASE_URL}mode-produit/agenda/`;
+const { aVenir } = await loadAgenda();
+const prochains = aVenir.filter((e) => !e.annule).slice(0, 3);
+
+const ressources = [
+  {
+    titre: "Agenda",
+    description: "Formations, ateliers et forums organisés autour du mode produit.",
+    href: agendaHref,
+  },
+  {
+    titre: "Être accompagné",
+    description: "Recherche utilisateur, mesure d'impact, feuille de route, accessibilité : sollicitez l'équipe Mode Produit.",
+    href: `${import.meta.env.BASE_URL}mode-produit/accompagnement/`,
+  },
+  {
+    titre: "Documentation",
+    description: "La documentation de référence du mode produit.",
+    href: LIENS.documentation,
+    externe: "docs.numerique.gouv.fr",
+  },
+  {
+    titre: "Communauté Teams",
+    description: "Échanger avec les autres équipes produit et suivre l'actualité de la communauté.",
+    href: LIENS.teams,
+    externe: "Microsoft Teams",
+  },
+  {
+    titre: "Référencer votre produit",
+    description: "Ajouter ou mettre à jour la fiche de votre produit dans le catalogue.",
+    href: LIENS.referencerProduit,
+    externe: "Grist",
+  },
+];
+---
+<Base title="Le mode produit" description="Agenda, accompagnement, documentation et communauté du mode produit à l'IGN.">
+  <section class="hero">
+    <div class="container">
+      <p class="kicker">Le mode produit</p>
+      <h1>Le mode produit à l'IGN</h1>
+      <p class="lead">
+        Cette rubrique rassemble les ressources des équipes qui conçoivent et font vivre les produits numériques de l'IGN : rendez-vous, accompagnement, documentation et communauté.
+      </p>
+    </div>
+  </section>
+
+  <section class="container section">
+    <h2>Prochains rendez-vous</h2>
+    {prochains.length > 0 ? (
+      <ul class="event-mini-list">
+        {prochains.map((e) => (
+          <li class="event-mini">
+            <div class="event__date event__date--sm" aria-hidden="true">
+              <span class="event__day">{jour(e.debut)}</span>
+              <span class="event__month">{mois(e.debut)}</span>
+            </div>
+            <div>
+              <a class="event-mini__title" href={`${agendaHref}#evenement-${e.id}`}>{e.titre}</a>
+              <p class="muted">{quand(e)}{e.lieu && ` · ${e.lieu}`}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="muted">Aucun rendez-vous programmé pour le moment.</p>
+    )}
+    <a href={agendaHref}>Voir tout l'agenda →</a>
+  </section>
+
+  <section class="container section section--tight-top">
+    <h2>Ressources</h2>
+    <div class="card-grid">
+      {ressources.map((r) => (
+        <article class="card">
+          <div class="card__body">
+            <h3 class="card__title">
+              <a href={r.href} target={r.externe ? "_blank" : undefined} rel={r.externe ? "noopener noreferrer" : undefined}>{r.titre}</a>
+            </h3>
+            <p class="card__desc">{r.description}</p>
+            <p class="card__meta">{r.externe ? `${r.externe} ↗` : "Voir la page →"}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+</Base>
