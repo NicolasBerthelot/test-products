@@ -247,6 +247,34 @@ a:hover {
   box-shadow: 0 1px 3px rgba(9, 22, 37, 0.08);
 }
 
+/* Courbes de niveau décoratives (relief fictif, voir src/assets/contours.svg),
+   estompées vers la gauche pour ne pas concurrencer la marque. */
+.site-header__main {
+  position: relative;
+}
+
+.site-header__main::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 auto;
+  width: min(48rem, 60%);
+  background: url("../assets/contours.svg") right top / cover no-repeat;
+  opacity: 0.55;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 65%);
+  mask-image: linear-gradient(to right, transparent, #000 65%);
+  pointer-events: none;
+}
+
+.site-header__main > * {
+  position: relative;
+}
+
+@media (max-width: 48em) {
+  .site-header__main::before {
+    display: none;
+  }
+}
+
 .site-header__top {
   display: flex;
   align-items: center;

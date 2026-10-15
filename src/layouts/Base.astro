@@ -62,24 +62,26 @@ const current = sections.find((s) => s.active);
 <body>
   <a class="skip-link" href="#content">Aller au contenu</a>
   <header class="site-header">
-    <div class="container site-header__top">
-      <a class="brand" href={base}>
-        <span class="brand__mark" aria-hidden="true"></span>
-        <span>
-          <span class="brand__title">Equipes Produits IGN</span>
-          <span class="brand__tagline">L'offre de l'IGN et le mode produit</span>
-        </span>
-      </a>
-    </div>
-    <nav class="main-nav" aria-label="Rubriques">
-      <div class="container">
-        <ul>
-          {sections.map((s) => (
-            <li><a href={s.href} aria-current={s.active ? "true" : undefined}>{s.label}</a></li>
-          ))}
-        </ul>
+    <div class="site-header__main">
+      <div class="container site-header__top">
+        <a class="brand" href={base}>
+          <span class="brand__mark" aria-hidden="true"></span>
+          <span>
+            <span class="brand__title">Equipes Produits IGN</span>
+            <span class="brand__tagline">L'offre de l'IGN et le mode produit</span>
+          </span>
+        </a>
       </div>
-    </nav>
+      <nav class="main-nav" aria-label="Rubriques">
+        <div class="container">
+          <ul>
+            {sections.map((s) => (
+              <li><a href={s.href} aria-current={s.active ? "true" : undefined}>{s.label}</a></li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+    </div>
     {current && (
       <nav class="subnav" aria-label={current.label}>
         <div class="container">
