@@ -61,6 +61,21 @@ LABEL_TO_KEY = {
 
 DATE_FIELDS = {"Dernière mise à jour"}
 
+# Colonne lue par colId (donné tel quel par l'équipe) plutôt que par libellé.
+# Absente ou vide : le produit est simplement considéré comme non accompagné.
+ACCOMPAGNE_COL_ID = "Accompagne_par_le_collectif_Mode_Produit"
+
+
+def is_truthy(v) -> bool:
+    """Case à cocher Grist (bool), ou valeur texte/choix du type "Oui"."""
+    if isinstance(v, bool):
+        return v
+    if isinstance(v, (int, float)):
+        return v != 0
+    if isinstance(v, str):
+        return v.strip().lower() in {"oui", "vrai", "true", "x", "1", "yes"}
+    return False
+
 # Colonnes "Image" (table Produits) et "Photo" (table Equipes), facultatives :
 # URL texte directe, ou pièce jointe Grist téléchargée au moment du build et
 # re-hébergée dans public/images/ ou public/agents/.
@@ -343,6 +358,7 @@ def main(out_path: str):
             product[key] = offre if key == "offre" else get(label, fields)
         product["image"] = resolve_image(fields, label_to_column, slug, base_url, doc_id, api_key)
         product["equipe"] = team_by_product.get(record["id"], [])
+        product["accompagneModeProduit"] = is_truthy(fields.get(ACCOMPAGNE_COL_ID))
 
         products.append(product)
 

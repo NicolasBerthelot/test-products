@@ -6,6 +6,7 @@ import { LIENS } from "../lib/liens";
 // Ordre de première apparition (= ordre des lignes dans la table Produits sur
 // Grist, où les produits sont groupés par offre), pas un tri alphabétique.
 const offres = [...new Set(produits.map((p) => p.offre).filter(Boolean))];
+const nbAccompagnes = produits.filter((p) => p.accompagneModeProduit).length;
 
 const DIACRITICS = /[̀-ͯ]/g;
 
@@ -78,6 +79,12 @@ function searchIndex(p: (typeof produits)[number]) {
               );
             })}
           </ul>
+          {nbAccompagnes > 0 && (
+            <label class="filter-check">
+              <input type="checkbox" id="accompagne-filter" />
+              Uniquement les produits accompagnés par le collectif Mode Produit ({nbAccompagnes})
+            </label>
+          )}
         </div>
       </div>
     </div>
@@ -86,7 +93,12 @@ function searchIndex(p: (typeof produits)[number]) {
   <section class="container section">
     <div class="card-grid" id="product-grid">
       {produits.map((p) => (
-        <div class="product-item" data-offre={p.offre} data-search={searchIndex(p)}>
+        <div
+          class="product-item"
+          data-offre={p.offre}
+          data-search={searchIndex(p)}
+          data-accompagne={p.accompagneModeProduit ? "1" : undefined}
+        >
           <article class="card">
             {p.image && (
               <img
@@ -96,6 +108,9 @@ function searchIndex(p: (typeof produits)[number]) {
               />
             )}
             <div class="card__body">
+              {p.accompagneModeProduit && (
+                <p class="badge-mp card__badge" title="Accompagné par le collectif Mode Produit">Accompagné Mode Produit</p>
+              )}
               {p.offre && <p class="card__offre">{p.offre}</p>}
               <h2 class="card__title">
                 <a href={`${import.meta.env.BASE_URL}produits/${p.slug}/`}>{p.nom}</a>
@@ -125,16 +140,19 @@ function searchIndex(p: (typeof produits)[number]) {
     const filtersToggle = document.getElementById("filters-toggle");
     const filtersPanel = document.getElementById("filters-panel");
     const filtersToggleValue = document.getElementById("filters-toggle-value");
+    const accompagneFilter = document.querySelector<HTMLInputElement>("#accompagne-filter");
 
     let activeOffre = "all";
 
     function applyFilters() {
       const term = normalize(searchInput?.value.trim() ?? "");
+      const onlyAccompagnes = accompagneFilter?.checked ?? false;
       let visibleCount = 0;
       items.forEach((item) => {
         const matchOffre = activeOffre === "all" || item.dataset.offre === activeOffre;
         const matchSearch = term === "" || (item.dataset.search ?? "").includes(term);
-        const match = matchOffre && matchSearch;
+        const matchAccompagne = !onlyAccompagnes || item.dataset.accompagne === "1";
+        const match = matchOffre && matchSearch && matchAccompagne;
         item.style.display = match ? "" : "none";
         if (match) visibleCount++;
       });
@@ -152,6 +170,7 @@ function searchIndex(p: (typeof produits)[number]) {
     });
 
     searchInput?.addEventListener("input", applyFilters);
+    accompagneFilter?.addEventListener("change", applyFilters);
 
     filtersToggle?.addEventListener("click", () => {
       const expanded = filtersToggle.getAttribute("aria-expanded") === "true";

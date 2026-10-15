@@ -71,6 +71,11 @@ function serviceColor(service: string) {
           {p.offre && <p class="kicker">{p.offre}</p>}
           <h1>{p.nom}</h1>
           {p.promesse && <p class="lead">{p.promesse}</p>}
+          {p.accompagneModeProduit && (
+            <p class="hero__badge">
+              <a class="badge-mp" href={`${import.meta.env.BASE_URL}mode-produit/`}>Accompagné par le collectif Mode Produit</a>
+            </p>
+          )}
         </div>
         {p.image && (
           <img
