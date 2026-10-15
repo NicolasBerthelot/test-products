@@ -244,8 +244,7 @@ a:hover {
 
 .site-header {
   background: #fff;
-  border-bottom: 1px solid var(--border);
-  box-shadow: 0 1px 3px rgba(9, 22, 37, 0.06);
+  box-shadow: 0 1px 3px rgba(9, 22, 37, 0.08);
 }
 
 .site-header__top {
@@ -292,10 +291,6 @@ a:hover {
   font-size: 0.875rem;
   line-height: 1.4;
   color: var(--ink-soft);
-}
-
-.main-nav {
-  border-top: 1px solid var(--border);
 }
 
 .main-nav ul,
