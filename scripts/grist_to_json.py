@@ -4,6 +4,7 @@ Variables d'environnement attendues :
     GRIST_API_KEY   clé API Grist (Profil -> API key, sur grist.numerique.gouv.fr)
     GRIST_DOC_ID    identifiant du document (ex: toCYiKQga5KP)
     GRIST_TABLE     nom de la table (défaut: Produits)
+    GRIST_VIEW_ID   page Grist dont on reprend l'ordre des lignes, le n de /p/n (défaut: 1)
     GRIST_BASE_URL  racine de l'instance Grist (défaut: https://grist.numerique.gouv.fr)
 
 Usage:
@@ -307,6 +308,43 @@ def resolve_value(raw, col_type: str, label: str, base_url: str, doc_id: str, ap
     return clean_scalar(raw, label)
 
 
+def page_sort_spec(base_url: str, doc_id: str, table: str, api_key: str, view_id: int) -> str:
+    """Tri à passer à l'API pour retrouver l'ordre de la page Grist `view_id`.
+
+    L'API renvoie sinon les lignes par ordre de création. On reprend le tri par
+    colonnes de la page s'il y en a un, l'ordre manuel (manualSort) sinon. En
+    cas d'imprévu sur les tables de métadonnées, on garde l'ordre manuel.
+    """
+    try:
+        meta = f"{base_url}/api/docs/{doc_id}/tables"
+        table_ref = next(
+            t["id"] for t in fetch_json(f"{meta}/_grist_Tables/records", api_key)["records"]
+            if t["fields"].get("tableId") == table
+        )
+        section = next(
+            s for s in fetch_json(f"{meta}/_grist_Views_section/records", api_key)["records"]
+            if s["fields"].get("parentId") == view_id and s["fields"].get("tableRef") == table_ref
+        )
+        raw_refs = section["fields"].get("sortColRefs")
+        sort_refs = raw_refs if isinstance(raw_refs, list) else json.loads(raw_refs or "[]")
+        col_ids = {
+            c["id"]: c["fields"].get("colId")
+            for c in fetch_json(f"{meta}/_grist_Tables_column/records", api_key)["records"]
+        }
+        spec = []
+        for ref in sort_refs:
+            # Entrée numérique (-12 = décroissant) ou texte avec options ("12:emptyLast").
+            n = int(str(ref).split(":")[0])
+            col_id = col_ids.get(abs(n))
+            if col_id:
+                spec.append(("-" if n < 0 else "") + col_id)
+        if spec:
+            return ",".join(spec + ["manualSort"])
+    except Exception as e:
+        print(f"Attention : tri de la page Grist {view_id} illisible, ordre manuel utilisé : {e}", file=sys.stderr)
+    return "manualSort"
+
+
 def main(out_path: str):
     api_key = os.environ["GRIST_API_KEY"]
     doc_id = os.environ.get("GRIST_DOC_ID", "toCYiKQga5KP")
@@ -319,7 +357,10 @@ def main(out_path: str):
     if missing:
         print(f"Attention : colonnes introuvables dans Grist (ignorées) : {missing}", file=sys.stderr)
 
-    records_data = fetch_json(f"{base_url}/api/docs/{doc_id}/tables/{table}/records", api_key)
+    view_id = int(os.environ.get("GRIST_VIEW_ID", "1"))
+    sort = page_sort_spec(base_url, doc_id, table, api_key, view_id)
+    print(f"Ordre des fiches : page Grist {view_id}, tri « {sort} »")
+    records_data = fetch_json(f"{base_url}/api/docs/{doc_id}/tables/{table}/records?sort={sort}", api_key)
     records = records_data.get("records", [])
 
     team_by_product = build_team_by_product(base_url, doc_id, api_key)
