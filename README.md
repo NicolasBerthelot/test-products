@@ -16,7 +16,7 @@ npm run preview  # prévisualise le build
 Le site a deux rubriques, chacune avec sa barre d'onglets (définies dans
 `layouts/Base.astro`) :
 
-- **L'offre IGN** : catalogue des produits (page d'accueil), familles d'offre, fiches produit ;
+- **L'offre IGN** : catalogue des produits (page d'accueil), offre, fiches produit ;
 - **Le mode produit** : présentation, agenda, demande d'accompagnement, liens vers la
   documentation et la communauté Teams.
 
@@ -29,7 +29,7 @@ src/
   styles/global.css              ← toute la mise en forme du site (couleurs, composants)
   assets/icons/                  ← icônes SVG (Remix Icon, licence Apache 2.0)
   pages/index.astro              ← catalogue des produits (accueil)
-  pages/offre.astro              ← familles d'offre
+  pages/offre.astro              ← offre (familles de produits et services)
   pages/produits/[slug].astro    ← fiche produit (une page par produit)
   pages/mode-produit/            ← présentation, agenda, accompagnement
 ```

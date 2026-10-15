@@ -32,7 +32,7 @@ const sections: { label: string; href: string; active: boolean; tabs: Tab[] }[] 
     active: !path.startsWith(modeProduitHref),
     tabs: [
       { label: "Produits", href: base, active: path === base || path.startsWith(`${base}produits/`) },
-      { label: "Familles d'offre", href: `${base}offre/`, active: path.startsWith(`${base}offre/`) },
+      { label: "Offre", href: `${base}offre/`, active: path.startsWith(`${base}offre/`) },
     ],
   },
   {
