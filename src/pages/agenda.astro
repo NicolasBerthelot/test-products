@@ -1,0 +1,101 @@
+---
+import Base from "../layouts/Base.astro";
+import { loadAgenda, TIME_ZONE, type AgendaEvent } from "../lib/agenda";
+
+const { aVenir, passes, indisponible } = await loadAgenda();
+
+const fmt = (options: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat("fr-FR", { timeZone: TIME_ZONE, ...options });
+const dayFmt = fmt({ day: "numeric" });
+const monthFmt = fmt({ month: "short" });
+const dateFmt = fmt({ weekday: "long", day: "numeric", month: "long", year: "numeric" });
+const timeFmt = fmt({ hour: "2-digit", minute: "2-digit" });
+const isoDayFmt = new Intl.DateTimeFormat("en-CA", { timeZone: TIME_ZONE });
+
+const time = (d: Date) => timeFmt.format(d).replace(":", "h");
+
+function quand(e: AgendaEvent) {
+  if (!e.fin) return `${dateFmt.format(e.debut)}, ${time(e.debut)}`;
+  if (isoDayFmt.format(e.debut) === isoDayFmt.format(e.fin)) {
+    return `${dateFmt.format(e.debut)}, ${time(e.debut)} – ${time(e.fin)}`;
+  }
+  return `du ${dateFmt.format(e.debut)}, ${time(e.debut)} au ${dateFmt.format(e.fin)}, ${time(e.fin)}`;
+}
+
+function places(e: AgendaEvent) {
+  if (e.placesRestantes !== null && e.capacite !== null) return `${e.placesRestantes} places restantes sur ${e.capacite}`;
+  if (e.capacite !== null) return `${e.capacite} places`;
+  return null;
+}
+
+function statusClass(e: AgendaEvent) {
+  if (e.annule) return "event-status--danger";
+  if (e.complet) return "event-status--warning";
+  if (e.inscriptionPossible) return "event-status--success";
+  return null;
+}
+---
+<Base title="Agenda" description="Formations, ateliers et temps forts du mode produit à l'IGN.">
+  <section class="hero">
+    <div class="container">
+      <p class="kicker">Mode produit</p>
+      <h1>Agenda</h1>
+      <p class="lead">Formations, ateliers et temps forts pour faire vivre le mode produit à l'IGN.</p>
+    </div>
+  </section>
+
+  <section class="container section">
+    {indisponible ? (
+      <p class="muted">L'agenda n'a pas pu être chargé lors de la dernière mise à jour du site. Réessayez un peu plus tard.</p>
+    ) : (
+      <>
+        <h2 class="agenda-heading">À venir</h2>
+        {aVenir.length === 0 && <p class="muted">Aucun événement programmé pour le moment.</p>}
+        <div class="event-list">
+          {aVenir.map((e) => (
+            <article class:list={["event", { "event--cancelled": e.annule }]}>
+              <div class="event__date" aria-hidden="true">
+                <span class="event__day">{dayFmt.format(e.debut)}</span>
+                <span class="event__month">{monthFmt.format(e.debut)}</span>
+              </div>
+              <div class="event__body">
+                <p class="event__tags">
+                  {e.type && (
+                    <span class="event-type" style={e.typeColors ? `background:${e.typeColors.fill};color:${e.typeColors.text}` : undefined}>
+                      {e.type}
+                    </span>
+                  )}
+                  {e.etat && <span class:list={["event-status", statusClass(e)]}>{e.etat}</span>}
+                </p>
+                <h3 class="event__title">{e.titre}</h3>
+                <dl class="event__facts">
+                  <div><dt>Quand</dt><dd>{quand(e)}</dd></div>
+                  {e.lieu && <div><dt>Où</dt><dd>{e.lieu}</dd></div>}
+                  {e.public && <div><dt>Pour qui</dt><dd>{e.public}</dd></div>}
+                  {places(e) && <div><dt>Places</dt><dd>{places(e)}</dd></div>}
+                </dl>
+                {e.descriptionHtml && <div class="event__desc prose" set:html={e.descriptionHtml} />}
+                {e.inscriptionPossible && (
+                  <a class="btn btn--sm" href={e.lienInscription} target="_blank" rel="noopener noreferrer">S'inscrire</a>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+
+        {passes.length > 0 && (
+          <details class="agenda-past">
+            <summary>Événements passés ({passes.length})</summary>
+            <ul>
+              {passes.map((e) => (
+                <li>
+                  <span class="muted">{dateFmt.format(e.debut)}</span> — {e.titre}
+                  {e.type && <span class="muted"> · {e.type}</span>}
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
+      </>
+    )}
+  </section>
+</Base>
