@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Le site a déménagé · Equipes Produits IGN</title>
+  <meta name="robots" content="noindex" />
+  <script>
+    // Le site a déménagé de nicolasberthelot.github.io/test-products vers
+    // ignf.github.io/mode-produit : on conserve le chemin demandé (fiche
+    // produit, page Offre...), la requête et l'ancre.
+    (function () {
+      var path = location.pathname.replace(/^\/test-products\/?/, "");
+      location.replace("https://ignf.github.io/mode-produit/" + path + location.search + location.hash);
+    })();
+  </script>
+  <meta http-equiv="refresh" content="0;url=https://ignf.github.io/mode-produit/" />
+  <link rel="canonical" href="https://ignf.github.io/mode-produit/" />
+</head>
+<body>
+  <p>Ce site a déménagé : <a href="https://ignf.github.io/mode-produit/">ignf.github.io/mode-produit</a>.</p>
+</body>
+</html>
